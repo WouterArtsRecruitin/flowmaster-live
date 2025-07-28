@@ -2575,6 +2575,47 @@
 
         function showCurrentStep() {
             document.getElementById(`step${currentStep}`).classList.remove('hidden');
+            
+            // Hide chat button and other UI elements on step 10 (bedankpagina)
+            if (currentStep === 10) {
+                // Hide chat bubble
+                const chatBubble = document.querySelector('.chat-bubble');
+                if (chatBubble) chatBubble.style.display = 'none';
+                
+                // Hide progress bar
+                const progressBar = document.querySelector('.progress-bar');
+                if (progressBar) progressBar.style.display = 'none';
+                
+                // Hide score tracker if visible
+                const scoreTracker = document.getElementById('scoreTracker');
+                if (scoreTracker) scoreTracker.style.display = 'none';
+                
+                // Hide floating shapes background elements
+                const floatingShapes = document.querySelectorAll('.floating-shape');
+                floatingShapes.forEach(shape => shape.style.display = 'none');
+                
+                // Clean bedankpagina presentation - hide any unnecessary UI
+                document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            } else {
+                // Show elements on other steps
+                const chatBubble = document.querySelector('.chat-bubble');
+                if (chatBubble) chatBubble.style.display = 'block';
+                
+                const progressBar = document.querySelector('.progress-bar');
+                if (progressBar) progressBar.style.display = 'block';
+                
+                const scoreTracker = document.getElementById('scoreTracker');
+                if (scoreTracker && scoreTracker.classList.contains('hidden') === false) {
+                    scoreTracker.style.display = 'block';
+                }
+                
+                // Restore floating shapes
+                const floatingShapes = document.querySelectorAll('.floating-shape');
+                floatingShapes.forEach(shape => shape.style.display = 'block');
+                
+                // Restore original background
+                document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            }
         }
 
         function updateProgress() {
