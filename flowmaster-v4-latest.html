@@ -2594,17 +2594,29 @@
             // Add other sectors as needed...
         };
 
-        // Step navigation
-        function nextStep() {
+        // Step navigation - FIXED: Moved to ensure definition before use
+        window.nextStep = function() {
+            console.log('🔧 nextStep called, currentStep:', currentStep);
             if (validateCurrentStep()) {
                 // Track step progression for A/B testing
-                abTest.trackConversion(`step_${currentStep}_completed`, currentStep * 10);
+                try {
+                    abTest.trackConversion(`step_${currentStep}_completed`, currentStep * 10);
+                } catch (e) {
+                    console.warn('A/B test tracking failed:', e);
+                }
                 
                 hideCurrentStep();
                 currentStep++;
                 showCurrentStep();
                 updateProgress();
+            } else {
+                console.warn('Validation failed for step:', currentStep);
             }
+        };
+        
+        // Ensure global availability
+        function nextStep() {
+            window.nextStep();
         }
 
         function prevStep() {
