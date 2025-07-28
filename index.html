@@ -3980,42 +3980,40 @@
             
             if (sessionData) {
                 try {
-                    const rawData = JSON.parse(sessionData);
-                    console.log('Raw assessment data:', rawData);
+                    const zapierData = JSON.parse(sessionData);
+                    console.log('Session data (Zapier format):', zapierData);
                     
-                    // Transform data to correct format for PDF generation
+                    // The session data is in Zapier payload format, use it directly
                     const assessmentData = {
-                        // Core company info
-                        companyName: rawData.companyName || formData.companyName || 'Onbekend Bedrijf',
-                        contactName: rawData.contactName || formData.contactName || 'Onbekende Contactpersoon',
-                        contactEmail: rawData.contactEmail || formData.contactEmail || '',
-                        contactPhone: rawData.contactPhone || formData.contactPhone || '',
+                        // Core company info - use Zapier payload structure
+                        companyName: zapierData.companyName || 'Onbekend Bedrijf',
+                        contactName: zapierData.contactName || 'Onbekende Contactpersoon',
+                        contactEmail: zapierData.contactEmail || '',
+                        contactPhone: zapierData.contactPhone || '',
                         
-                        // Scores and assessment results
-                        totalScore: rawData.totalScore || formData.totalScore || 0,
-                        leadScore: rawData.leadScore || calculateLeadScore(rawData) || 0,
-                        leadGrade: rawData.leadGrade || getLeadGrade(rawData.leadScore || calculateLeadScore(rawData)) || 'D',
+                        // Scores and assessment results - directly from Zapier payload
+                        totalScore: zapierData.totalScore || 0,
+                        leadScore: zapierData.leadScore || 0,
+                        leadGrade: zapierData.leadGrade || 'D',
                         
-                        // Sector information
-                        specificSector: rawData.specificSector || formData.specificSector || 'unknown',
-                        sectorDisplayName: getSectorDisplayName(rawData.specificSector || formData.specificSector),
+                        // Sector information - use Zapier payload structure
+                        specificSector: zapierData.specificSector || 'unknown',
+                        sectorDisplayName: zapierData.sectorDisplayName || getSectorDisplayName(zapierData.specificSector),
                         
-                        // Company details
-                        companySize: rawData.companySize || formData.companySize || 'Onbekend',
-                        companyMaturity: getMaturityLevel(rawData.totalScore || formData.totalScore || 0),
+                        // Company details - from Zapier payload
+                        companySize: zapierData.companySize || 'Onbekend',
+                        companyMaturity: zapierData.companyMaturity || 'Basic',
                         
-                        // Service selection
-                        selectedService: rawData.selectedService || formData.selectedService || 'basic',
+                        // Service selection - from Zapier payload
+                        selectedService: zapierData.selectedService || 'basic',
                         
-                        // Timestamps
-                        timestamp: rawData.timestamp || new Date().toISOString(),
-                        
-                        // Assessment metadata
-                        assessment_id: rawData.assessment_id || 'FM-' + Date.now(),
-                        source: rawData.source || 'FlowMaster Pro V4'
+                        // Timestamps and metadata - from Zapier payload
+                        timestamp: zapierData.timestamp || new Date().toISOString(),
+                        assessment_id: zapierData.sessionId || 'FM-' + Date.now(),
+                        source: zapierData.source || 'FlowMaster Pro V4'
                     };
                     
-                    console.log('Processed assessment data for PDF:', assessmentData);
+                    console.log('Processed assessment data for PDF (from Zapier payload):', assessmentData);
                     
                     // Show download preparation message
                     const downloadBtn = document.querySelector('[onclick="downloadAssessmentReport()"]');
