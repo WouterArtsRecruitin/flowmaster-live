@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FlowMaster Test Script</title>
+</head>
+<body>
+    <h1>FlowMaster Pro Test Results</h1>
+    <div id="results"></div>
+
+    <script>
+        async function testFlowMasterVersions() {
+            const results = document.getElementById('results');
+            results.innerHTML = '<h2>Testing FlowMaster Pro Versions...</h2>';
+            
+            // Test 1: Check if main version loads
+            try {
+                const mainResponse = await fetch('https://wouterartsrecruitin.github.io/flowmaster-live/');
+                const mainContent = await mainResponse.text();
+                
+                results.innerHTML += '<h3>✅ Main Version Load Test</h3>';
+                results.innerHTML += `<p>Status: ${mainResponse.status}</p>`;
+                results.innerHTML += `<p>Content Length: ${mainContent.length} characters</p>`;
+                
+                // Check for key elements
+                const hasStartButton = mainContent.includes('Start Complete Assessment');
+                const hasNextStepFunction = mainContent.includes('function nextStep()');
+                const hasSyntaxErrors = mainContent.includes('missing ) after argument list');
+                
+                results.innerHTML += `<p>Has Start Button: ${hasStartButton ? '✅' : '❌'}</p>`;
+                results.innerHTML += `<p>Has nextStep Function: ${hasNextStepFunction ? '✅' : '❌'}</p>`;
+                results.innerHTML += `<p>Has Syntax Errors: ${hasSyntaxErrors ? '❌' : '✅'}</p>`;
+                
+            } catch (error) {
+                results.innerHTML += `<h3>❌ Main Version Test Failed</h3><p>Error: ${error.message}</p>`;
+            }
+            
+            // Test 2: Check simple version
+            try {
+                const simpleResponse = await fetch('https://wouterartsrecruitin.github.io/flowmaster-live/simple-test.html');
+                const simpleContent = await simpleResponse.text();
+                
+                results.innerHTML += '<h3>✅ Simple Version Load Test</h3>';
+                results.innerHTML += `<p>Status: ${simpleResponse.status}</p>`;
+                results.innerHTML += `<p>Content Length: ${simpleContent.length} characters</p>`;
+                
+                const hasGoToStep = simpleContent.includes('function goToStep');
+                const hasTestAll = simpleContent.includes('function testAll');
+                
+                results.innerHTML += `<p>Has goToStep Function: ${hasGoToStep ? '✅' : '❌'}</p>`;
+                results.innerHTML += `<p>Has testAll Function: ${hasTestAll ? '✅' : '❌'}</p>`;
+                
+            } catch (error) {
+                results.innerHTML += `<h3>❌ Simple Version Test Failed</h3><p>Error: ${error.message}</p>`;
+            }
+            
+            // Test 3: JavaScript Validation
+            results.innerHTML += '<h3>🧪 JavaScript Function Tests</h3>';
+            
+            // Create iframe to test main version
+            const iframe = document.createElement('iframe');
+            iframe.src = 'https://wouterartsrecruitin.github.io/flowmaster-live/';
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+            
+            iframe.onload = function() {
+                try {
+                    const iframeWindow = iframe.contentWindow;
+                    const hasNextStep = typeof iframeWindow.nextStep === 'function';
+                    const hasTestBedank = typeof iframeWindow.testBedankpagina === 'function';
+                    
+                    results.innerHTML += `<p>Main Version nextStep Available: ${hasNextStep ? '✅' : '❌'}</p>`;
+                    results.innerHTML += `<p>Main Version testBedankpagina Available: ${hasTestBedank ? '✅' : '❌'}</p>`;
+                    
+                    if (hasNextStep) {
+                        results.innerHTML += '<p><strong>🎉 MAIN VERSION JAVASCRIPT IS WORKING!</strong></p>';
+                    } else {
+                        results.innerHTML += '<p><strong>❌ Main version has JavaScript issues</strong></p>';
+                    }
+                } catch (error) {
+                    results.innerHTML += `<p>JavaScript Test Error: ${error.message}</p>`;
+                }
+            };
+            
+            results.innerHTML += '<h3>📊 Test Completed</h3>';
+        }
+        
+        // Run tests immediately
+        testFlowMasterVersions();
+    </script>
+</body>
+</html>
