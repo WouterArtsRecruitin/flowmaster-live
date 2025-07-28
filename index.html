@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FlowMaster Pro V4 - Recruitment Intelligence Assessment</title>
+    <title>FlowMaster Pro V4 - Recruitment Assessment</title>
     
-    <!-- PDF Generation Library -->
+    <!-- PDF Generation Libraries -->
     <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
@@ -41,37 +41,17 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border-radius: 15px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-        }
-
-        .header-content {
-            position: relative;
-            z-index: 1;
         }
 
         .header h1 {
             font-size: 2.5em;
             margin-bottom: 10px;
             font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
         .header p {
             font-size: 1.2em;
             opacity: 0.9;
-            font-weight: 300;
         }
 
         .progress-bar {
@@ -80,7 +60,6 @@
             background: #e0e0e0;
             border-radius: 10px;
             margin: 30px 0;
-            overflow: hidden;
         }
 
         .progress-fill {
@@ -88,7 +67,7 @@
             background: linear-gradient(90deg, #667eea, #764ba2);
             border-radius: 10px;
             transition: width 0.3s ease;
-            width: 10%;
+            width: 12.5%;
         }
 
         .step {
@@ -124,70 +103,20 @@
         }
 
         .form-group input,
-        .form-group select,
-        .form-group textarea {
+        .form-group select {
             width: 100%;
             padding: 15px;
             border: 2px solid #e0e0e0;
             border-radius: 10px;
             font-size: 16px;
             transition: all 0.3s ease;
-            background: #f8f9fa;
         }
 
         .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
+        .form-group select:focus {
             outline: none;
             border-color: #667eea;
-            background: white;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .sector-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .sector-card {
-            background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 15px;
-            padding: 25px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .sector-card:hover {
-            border-color: #667eea;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
-        }
-
-        .sector-card.selected {
-            border-color: #667eea;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-        }
-
-        .sector-card .sector-icon {
-            font-size: 3em;
-            margin-bottom: 15px;
-        }
-
-        .sector-card h3 {
-            color: #2c3e50;
-            margin-bottom: 10px;
-            font-size: 1.2em;
-        }
-
-        .sector-card p {
-            color: #666;
-            font-size: 0.9em;
         }
 
         .question-grid {
@@ -201,12 +130,6 @@
             padding: 20px;
             border-radius: 12px;
             border-left: 4px solid #667eea;
-            transition: all 0.3s ease;
-        }
-
-        .question-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
         .question-card h3 {
@@ -239,6 +162,66 @@
             width: auto;
         }
 
+        .service-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .service-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
+        }
+
+        .service-card.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+
+        .service-card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .service-card .price {
+            font-size: 2em;
+            font-weight: 700;
+            color: #667eea;
+            margin: 15px 0;
+        }
+
+        .service-features {
+            list-style: none;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .service-features li {
+            padding: 5px 0;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .service-features li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
         .button {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -249,8 +232,6 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .button:hover {
@@ -281,69 +262,6 @@
             color: white;
         }
 
-        .service-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .service-card {
-            background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 25px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .service-card:hover {
-            border-color: #667eea;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
-        }
-
-        .service-card.selected {
-            border-color: #667eea;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-        }
-
-        .service-card h3 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-        }
-
-        .service-card .price {
-            font-size: 2em;
-            font-weight: 700;
-            color: #667eea;
-            margin: 15px 0;
-        }
-
-        .service-features {
-            list-style: none;
-            text-align: left;
-            margin-top: 20px;
-        }
-
-        .service-features li {
-            padding: 5px 0;
-            position: relative;
-            padding-left: 20px;
-        }
-
-        .service-features li:before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: #667eea;
-            font-weight: bold;
-        }
-
         .results-summary {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -353,42 +271,12 @@
             margin: 30px 0;
         }
 
-        .score-display {
-            font-size: 3em;
-            font-weight: 700;
-            margin: 20px 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .grade-badge {
-            display: inline-block;
-            padding: 10px 20px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 25px;
-            font-size: 1.2em;
-            font-weight: 600;
-            margin: 10px;
-        }
-
-        .recommendations {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 12px;
-            margin: 20px 0;
-            border-left: 4px solid #667eea;
-        }
-
         .privacy-notice {
             background: #f8f9fa;
             padding: 20px;
             border-radius: 10px;
             margin: 20px 0;
             border: 1px solid #e0e0e0;
-        }
-
-        .privacy-notice h3 {
-            color: #2c3e50;
-            margin-bottom: 15px;
         }
 
         .checkbox-group {
@@ -403,21 +291,8 @@
             margin: 0;
         }
 
-        .checkbox-group label {
-            margin: 0;
-            cursor: pointer;
-            line-height: 1.4;
-        }
-
         .error-message {
             color: #e74c3c;
-            font-size: 14px;
-            margin-top: 5px;
-            display: none;
-        }
-
-        .success-message {
-            color: #27ae60;
             font-size: 14px;
             margin-top: 5px;
             display: none;
@@ -432,10 +307,6 @@
                 font-size: 2em;
             }
             
-            .sector-grid {
-                grid-template-columns: 1fr;
-            }
-            
             .button-group {
                 flex-direction: column;
                 gap: 10px;
@@ -447,10 +318,8 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <div class="header-content">
-                <h1>FlowMaster Pro V4</h1>
-                <p>Recruitment Intelligence Assessment</p>
-            </div>
+            <h1>FlowMaster Pro V4</h1>
+            <p>Streamlined Recruitment Assessment</p>
         </div>
 
         <!-- Progress Bar -->
@@ -462,8 +331,8 @@
         <div class="step active" id="step1">
             <h2>Welkom bij FlowMaster Pro V4</h2>
             <p style="text-align: center; font-size: 1.1em; margin: 30px 0;">
-                Ontdek de kracht van intelligente recruitment met onze geavanceerde assessment tool. 
-                In slechts 10 minuten krijg je een volledig rapport met gepersonaliseerde aanbevelingen.
+                Ontdek de kracht van intelligente recruitment in slechts 8 stappen. 
+                Krijg een volledig rapport met gepersonaliseerde aanbevelingen.
             </p>
             
             <div style="background: #f8f9fa; padding: 25px; border-radius: 12px; margin: 30px 0;">
@@ -475,11 +344,11 @@
                     </li>
                     <li style="padding: 8px 0; padding-left: 25px; position: relative;">
                         <span style="position: absolute; left: 0; color: #667eea;">🎯</span>
-                        Gepersonaliseerde kandidaat matching
+                        Praktische verbetervoorstellen
                     </li>
                     <li style="padding: 8px 0; padding-left: 25px; position: relative;">
                         <span style="position: absolute; left: 0; color: #667eea;">📈</span>
-                        Optimalisatie voorstellen voor betere resultaten
+                        Benchmark met andere bedrijven
                     </li>
                     <li style="padding: 8px 0; padding-left: 25px; position: relative;">
                         <span style="position: absolute; left: 0; color: #667eea;">🚀</span>
@@ -527,61 +396,15 @@
             </div>
         </div>
 
-        <!-- Step 3: Sector Selection -->
+        <!-- Step 3: General Assessment Questions -->
         <div class="step" id="step3">
-            <h2>In welke sector ben je actief?</h2>
+            <h2>Recruitment Assessment</h2>
             <p style="text-align: center; margin-bottom: 30px; color: #666;">
-                Selecteer je sector voor gepersonaliseerde assessment vragen
+                Beantwoord de volgende vragen om je recruitment proces te evalueren
             </p>
-            
-            <div class="sector-grid">
-                <div class="sector-card" onclick="selectSector('techniek_engineering')">
-                    <div class="sector-icon">⚙️</div>
-                    <h3>Techniek & Engineering</h3>
-                    <p>Mechanical, Electrical, Software Engineering</p>
-                </div>
-                
-                <div class="sector-card" onclick="selectSector('bouw_constructie')">
-                    <div class="sector-icon">🏗️</div>
-                    <h3>Bouw & Constructie</h3>
-                    <p>Projectleiding, Uitvoering, BIM</p>
-                </div>
-                
-                <div class="sector-card" onclick="selectSector('installatietechniek')">
-                    <div class="sector-icon">🔌</div>
-                    <h3>Installatietechniek</h3>
-                    <p>HVAC, Elektro, Smart Building</p>
-                </div>
-                
-                <div class="sector-card" onclick="selectSector('metaalbewerking')">
-                    <div class="sector-icon">🔩</div>
-                    <h3>Metaalbewerking</h3>
-                    <p>CNC, Lassen, Productie</p>
-                </div>
-                
-                <div class="sector-card" onclick="selectSector('machinebouw')">
-                    <div class="sector-icon">🏭</div>
-                    <h3>Machinebouw</h3>
-                    <p>Design, Commissioning, Service</p>
-                </div>
-                
-                <div class="sector-card" onclick="selectSector('hightech_elektronica')">
-                    <div class="sector-icon">💻</div>
-                    <h3>High-tech & Elektronica</h3>
-                    <p>R&D, Embedded Systems, Hardware</p>
-                </div>
-                
-                <div class="sector-card" onclick="selectSector('automotive')">
-                    <div class="sector-icon">🚗</div>
-                    <h3>Automotive</h3>
-                    <p>EV, Autonomous, Manufacturing</p>
-                </div>
-                
-                <div class="sector-card" onclick="selectSector('energie_duurzaamheid')">
-                    <div class="sector-icon">🌱</div>
-                    <h3>Energie & Duurzaamheid</h3>
-                    <p>Renewable, Smart Grid, Storage</p>
-                </div>
+
+            <div class="question-grid" id="generalQuestions">
+                <!-- Questions will be dynamically generated -->
             </div>
 
             <div class="button-group">
@@ -590,20 +413,212 @@
             </div>
         </div>
 
-        <!-- Rest of the steps remain the same... -->
-        <!-- For brevity, I'll include the essential JavaScript functions -->
+        <!-- Step 4: Challenges -->
+        <div class="step" id="step4">
+            <h2>Wat is je grootste uitdaging?</h2>
+            
+            <div class="question-card">
+                <h3>Selecteer je primaire recruitment uitdaging:</h3>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" name="challenge" value="finding_candidates" id="challenge1">
+                        <label for="challenge1">Vinden van gekwalificeerde kandidaten</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="challenge" value="time_to_hire" id="challenge2">
+                        <label for="challenge2">Lange doorlooptijd van vacatures</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="challenge" value="quality_candidates" id="challenge3">
+                        <label for="challenge3">Kwaliteit van kandidaten</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="challenge" value="retention" id="challenge4">
+                        <label for="challenge4">Behoud van nieuwe medewerkers</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="challenge" value="cost_per_hire" id="challenge5">
+                        <label for="challenge5">Kosten per aanname</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="challenge" value="employer_branding" id="challenge6">
+                        <label for="challenge6">Employer branding en aantrekkelijkheid</label>
+                    </div>
+                </div>
+            </div>
 
+            <div class="button-group">
+                <button class="button secondary-button" onclick="previousStep()">Vorige</button>
+                <button class="button" onclick="nextStep()" id="step4NextBtn" disabled>Volgende</button>
+            </div>
+        </div>
+
+        <!-- Step 5: Goals -->
+        <div class="step" id="step5">
+            <h2>Wat wil je bereiken?</h2>
+            
+            <div class="question-card">
+                <h3>Wat is je primaire doel voor de komende 6 maanden?</h3>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" name="goal" value="more_candidates" id="goal1">
+                        <label for="goal1">Meer gekwalificeerde kandidaten aantrekken</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="goal" value="faster_hiring" id="goal2">
+                        <label for="goal2">Snellere invulling van vacatures</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="goal" value="better_quality" id="goal3">
+                        <label for="goal3">Betere kwaliteit van aannames</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="goal" value="reduce_costs" id="goal4">
+                        <label for="goal4">Recruitment kosten verlagen</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="goal" value="improve_retention" id="goal5">
+                        <label for="goal5">Behoud van nieuwe medewerkers verbeteren</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="goal" value="employer_brand" id="goal6">
+                        <label for="goal6">Employer brand versterken</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="button secondary-button" onclick="previousStep()">Vorige</button>
+                <button class="button" onclick="nextStep()" id="step5NextBtn" disabled>Volgende</button>
+            </div>
+        </div>
+
+        <!-- Step 6: Service Selection -->
+        <div class="step" id="step6">
+            <h2>Kies je gewenste service</h2>
+            
+            <div class="service-cards">
+                <div class="service-card" onclick="selectService('basic')" id="service-basic">
+                    <h3>Basis Assessment</h3>
+                    <div class="price">Gratis</div>
+                    <p>Perfecte start voor je recruitment analyse</p>
+                    <ul class="service-features">
+                        <li>Complete assessment analyse</li>
+                        <li>PDF rapport met scores</li>
+                        <li>Basis aanbevelingen</li>
+                        <li>Benchmark data</li>
+                    </ul>
+                </div>
+
+                <div class="service-card" onclick="selectService('professional')" id="service-professional">
+                    <h3>Professional</h3>
+                    <div class="price">€299</div>
+                    <p>Voor bedrijven die serieus willen optimaliseren</p>
+                    <ul class="service-features">
+                        <li>Alles van Basis</li>
+                        <li>1-op-1 strategie sessie (60 min)</li>
+                        <li>Gedetailleerd actieplan</li>
+                        <li>Templates en tools</li>
+                        <li>30 dagen email support</li>
+                    </ul>
+                </div>
+
+                <div class="service-card" onclick="selectService('enterprise')" id="service-enterprise">
+                    <h3>Enterprise</h3>
+                    <div class="price">€899</div>
+                    <p>Complete recruitment transformatie</p>
+                    <ul class="service-features">
+                        <li>Alles van Professional</li>
+                        <li>3 maanden begeleiding</li>
+                        <li>Team training sessies</li>
+                        <li>Custom recruitment strategy</li>
+                        <li>Implementatie ondersteuning</li>
+                        <li>Maandelijkse evaluaties</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="button secondary-button" onclick="previousStep()">Vorige</button>
+                <button class="button" onclick="nextStep()" id="step6NextBtn" disabled>Volgende</button>  
+            </div>
+        </div>
+
+        <!-- Step 7: Contact Information -->
+        <div class="step" id="step7">
+            <h2>Contact informatie</h2>
+            
+            <div class="form-group">
+                <label for="contactEmail">E-mailadres *</label>
+                <input type="email" id="contactEmail" placeholder="je.naam@bedrijf.nl">
+                <div class="error-message" id="contactEmailError">Geldig e-mailadres is verplicht</div>
+            </div>
+
+            <div class="form-group">
+                <label for="contactPhone">Telefoonnummer</label>
+                <input type="tel" id="contactPhone" placeholder="+31 6 12345678">
+            </div>
+
+            <div class="privacy-notice">
+                <h3>Privacy en gegevensverwerking</h3>
+                <p>Je gegevens worden veilig verwerkt conform de AVG wetgeving. We gebruiken je informatie uitsluitend voor het genereren van je rapport en eventuele vervolgcommunicatie over onze diensten.</p>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="privacyConsent" required>
+                    <label for="privacyConsent">
+                        Ik ga akkoord met de verwerking van mijn gegevens en het ontvangen van een rapport en vervolgcommunicatie van Recruitin BV. *
+                    </label>
+                </div>
+                <div class="error-message" id="privacyError">Privacy akkoord is verplicht</div>
+            </div>
+
+            <div class="button-group">
+                <button class="button secondary-button" onclick="previousStep()">Vorige</button>
+                <button class="button" onclick="submitForm()" id="submitBtn" disabled>Rapport Genereren</button>
+            </div>
+        </div>
+
+        <!-- Step 8: Thank You / Results -->
+        <div class="step" id="step8">
+            <div class="results-summary">
+                <h2>🎉 Assessment Voltooid!</h2>
+                <p style="font-size: 1.2em; margin: 20px 0;">
+                    Bedankt voor het invullen van de FlowMaster Pro V4 assessment. 
+                    Je rapport is klaar voor download!
+                </p>
+            </div>
+
+            <div style="text-align: center; margin: 30px 0;">
+                <button class="button" onclick="downloadAssessmentReport()" style="font-size: 18px; padding: 20px 40px;">
+                    📊 Download je Rapport
+                </button>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 25px; border-radius: 12px; margin: 30px 0;">
+                <h3>Wat gebeurt er nu?</h3>
+                <ul style="margin-top: 15px;">
+                    <li style="margin: 10px 0;">Je ontvangt binnen 24 uur een gedetailleerd rapport per email</li>
+                    <li style="margin: 10px 0;">Wij nemen contact met je op voor een gratis strategiesessie</li>
+                    <li style="margin: 10px 0;">Je krijgt toegang tot exclusieve recruitment resources</li>
+                </ul>
+            </div>
+
+            <div style="text-align: center; margin: 30px 0;">
+                <p style="color: #666; font-size: 14px;">
+                    Vragen? Bel direct: <strong>+31 614 314 593</strong> of email: <strong>wouter@recruitin.nl</strong>
+                </p>
+            </div>
+        </div>
     </div>
 
     <script>
         // Global variables
         let currentStep = 1;
+        const totalSteps = 8; // Reduced from 10
         let formData = {
             companyName: '',
             contactName: '',
             companySize: '',
-            sector: '',
-            specificSector: '',
             contactEmail: '',
             contactPhone: '',
             privacyConsent: false,
@@ -611,11 +626,101 @@
             challenge: '',
             goal: '',
             assessmentAnswers: {},
-            sectorAnswers: {},
             totalScore: 0,
             timestamp: new Date().toISOString(),
             assessment_id: 'FM-' + Date.now()
         };
+
+        // Assessment questions (general only)
+        const generalQuestions = [
+            {
+                id: 'recruitment_method',
+                question: 'Welke recruitment methode gebruik je hoofdzakelijk?',
+                options: [
+                    { value: 'job_boards', text: 'Online vacaturebanken (Indeed, LinkedIn Jobs)', points: 5 },
+                    { value: 'social_media', text: 'Social media recruitment', points: 15 },
+                    { value: 'referrals', text: 'Employee referral programma', points: 25 },
+                    { value: 'headhunting', text: 'Active sourcing/headhunting', points: 20 },
+                    { value: 'recruitment_agency', text: 'Externe recruitment bureaus', points: 10 }
+                ]
+            },
+            {
+                id: 'candidate_screening',
+                question: 'Hoe screen je kandidaten?',
+                options: [
+                    { value: 'cv_only', text: 'Alleen CV beoordeling', points: 5 },
+                    { value: 'phone_screen', text: 'Telefonische prescreening', points: 15 },
+                    { value: 'structured_interview', text: 'Gestructureerde interviews', points: 25 },
+                    { value: 'assessment_tests', text: 'Assessment tests en praktijkproeven', points: 30 },
+                    { value: 'no_screening', text: 'Geen systematische screening', points: 0 }
+                ]
+            },
+            {
+                id: 'employer_branding',
+                question: 'Hoe sterk is jullie employer branding?',
+                options: [
+                    { value: 'very_strong', text: 'Zeer sterk - kandidaten benaderen ons', points: 30 },
+                    { value: 'strong', text: 'Sterk - goede reputatie in de markt', points: 25 },
+                    { value: 'moderate', text: 'Gemiddeld - sommige activiteiten', points: 15 },
+                    { value: 'weak', text: 'Zwak - nauwelijks bezig met employer branding', points: 5 },
+                    { value: 'none', text: 'Geen employer branding activiteiten', points: 0 }
+                ]
+            },
+            {
+                id: 'time_to_hire',
+                question: 'Wat is jullie gemiddelde time-to-hire?',
+                options: [
+                    { value: 'under_2_weeks', text: 'Minder dan 2 weken', points: 30 },
+                    { value: '2_4_weeks', text: '2-4 weken', points: 25 },
+                    { value: '1_2_months', text: '1-2 maanden', points: 15 },
+                    { value: '2_3_months', text: '2-3 maanden', points: 10 },
+                    { value: 'over_3_months', text: 'Meer dan 3 maanden', points: 5 }
+                ]
+            },
+            {
+                id: 'candidate_experience',
+                question: 'Hoe beoordeel je de candidate experience?',
+                options: [
+                    { value: 'excellent', text: 'Uitstekend - positieve feedback van kandidaten', points: 30 },
+                    { value: 'good', text: 'Goed - meestal tevreden kandidaten', points: 25 },
+                    { value: 'average', text: 'Gemiddeld - wisselende feedback', points: 15 },
+                    { value: 'poor', text: 'Matig - regelmatig klachten', points: 10 },
+                    { value: 'very_poor', text: 'Slecht - veel negatieve feedback', points: 5 }
+                ]
+            },
+            {
+                id: 'retention_rate',
+                question: 'Wat is jullie retention rate in het eerste jaar?',
+                options: [
+                    { value: 'over_90', text: 'Meer dan 90%', points: 30 },
+                    { value: '80_90', text: '80-90%', points: 25 },
+                    { value: '70_80', text: '70-80%', points: 20 },
+                    { value: '60_70', text: '60-70%', points: 15 },
+                    { value: 'under_60', text: 'Minder dan 60%', points: 10 }
+                ]
+            },
+            {
+                id: 'data_tracking',
+                question: 'Welke recruitment metrics track je?',
+                options: [
+                    { value: 'comprehensive', text: 'Uitgebreide analytics (KPIs, ROI, quality of hire)', points: 30 },
+                    { value: 'basic_metrics', text: 'Basis metrics (time-to-hire, cost-per-hire)', points: 20 },
+                    { value: 'some_tracking', text: 'Beperkte tracking van resultaten', points: 10 },
+                    { value: 'no_tracking', text: 'Geen systematische tracking', points: 0 }
+                ]
+            },
+            {
+                id: 'technology_usage',
+                question: 'Welke recruitment technologie gebruik je?',
+                options: [
+                    { value: 'advanced_ats', text: 'Geavanceerd ATS met AI en automatisering', points: 30 },
+                    { value: 'basic_ats', text: 'Basis ATS systeem', points: 20 },
+                    { value: 'crm_tools', text: 'CRM en basis recruitment tools', points: 15 },
+                    { value: 'manual_excel', text: 'Hoofdzakelijk Excel en handmatige processen', points: 5 },
+                    { value: 'no_tech', text: 'Geen specifieke recruitment technologie', points: 0 }
+                ]
+            }
+        ];
 
         // Navigation functions
         function nextStep() {
@@ -626,6 +731,11 @@
             saveCurrentStepData();
             hideCurrentStep();
             currentStep++;
+            
+            if (currentStep === 3) {
+                generateGeneralQuestions();
+            }
+            
             showCurrentStep();
             updateProgress();
         }
@@ -652,27 +762,83 @@
         }
 
         function updateProgress() {
-            const progressPercentage = (currentStep / 10) * 100;
+            const progressPercentage = (currentStep / totalSteps) * 100;
             document.getElementById('progressFill').style.width = progressPercentage + '%';
         }
 
-        // Sector selection
-        function selectSector(sectorType) {
-            // Remove selection from all cards
-            document.querySelectorAll('.sector-card').forEach(card => {
+        // Question generation
+        function generateGeneralQuestions() {
+            const container = document.getElementById('generalQuestions');
+            container.innerHTML = '';
+
+            generalQuestions.forEach(question => {
+                const questionCard = document.createElement('div');
+                questionCard.className = 'question-card';
+                
+                let optionsHtml = '';
+                question.options.forEach(option => {
+                    optionsHtml += `
+                        <div class="radio-option">
+                            <input type="radio" name="${question.id}" value="${option.value}" id="${question.id}_${option.value}" onchange="handleGeneralQuestionChange('${question.id}', '${option.value}', ${option.points})">
+                            <label for="${question.id}_${option.value}">${option.text}</label>
+                        </div>
+                    `;
+                });
+
+                questionCard.innerHTML = `
+                    <h3>${question.question}</h3>
+                    <div class="radio-group">
+                        ${optionsHtml}
+                    </div>
+                `;
+
+                container.appendChild(questionCard);
+            });
+        }
+
+        function handleGeneralQuestionChange(questionId, value, points) {
+            formData.assessmentAnswers[questionId] = {
+                value: value,
+                points: points
+            };
+            
+            updateStep3Button();
+        }
+
+        function updateStep3Button() {
+            const answeredQuestions = Object.keys(formData.assessmentAnswers).length;
+            const button = document.getElementById('step3NextBtn');
+            
+            if (answeredQuestions >= generalQuestions.length) {
+                button.disabled = false;
+            } else {
+                button.disabled = true;
+            }
+        }
+
+        // Service selection
+        function selectService(serviceType) {
+            document.querySelectorAll('.service-card').forEach(card => {
                 card.classList.remove('selected');
             });
             
-            // Add selection to clicked card
-            event.target.closest('.sector-card').classList.add('selected');
-            
-            // Save selection
-            formData.sector = sectorType;
-            formData.specificSector = sectorType;
-            
-            // Enable next button
-            document.getElementById('step3NextBtn').disabled = false;
+            document.getElementById(`service-${serviceType}`).classList.add('selected');
+            formData.selectedService = serviceType;
+            document.getElementById('step6NextBtn').disabled = false;
         }
+
+        // Challenge and goal selection handlers
+        document.addEventListener('change', function(e) {
+            if (e.target.name === 'challenge') {
+                formData.challenge = e.target.value;
+                document.getElementById('step4NextBtn').disabled = false;
+            }
+            
+            if (e.target.name === 'goal') {
+                formData.goal = e.target.value;
+                document.getElementById('step5NextBtn').disabled = false;
+            }
+        });
 
         // Validation functions
         function validateCurrentStep() {
@@ -681,6 +847,14 @@
                     return validateStep2();
                 case 3:
                     return validateStep3();
+                case 4:
+                    return validateStep4();
+                case 5:
+                    return validateStep5();
+                case 6:
+                    return validateStep6();
+                case 7:
+                    return validateStep7();
                 default:
                     return true;
             }
@@ -710,7 +884,48 @@
         }
 
         function validateStep3() {
-            return formData.sector !== '';
+            const answeredQuestions = Object.keys(formData.assessmentAnswers).length;
+            return answeredQuestions >= generalQuestions.length;
+        }
+
+        function validateStep4() {
+            return document.querySelector('input[name="challenge"]:checked') !== null;
+        }
+
+        function validateStep5() {
+            return document.querySelector('input[name="goal"]:checked') !== null;
+        }
+
+        function validateStep6() {
+            return formData.selectedService !== '';
+        }
+
+        function validateStep7() {
+            const email = document.getElementById('contactEmail').value.trim();
+            const privacy = document.getElementById('privacyConsent').checked;
+            
+            let isValid = true;
+
+            if (!email || !isValidEmail(email)) {
+                showError('contactEmailError', 'Geldig e-mailadres is verplicht');
+                isValid = false;
+            } else {
+                hideError('contactEmailError');
+            }
+
+            if (!privacy) {
+                showError('privacyError', 'Privacy akkoord is verplicht');
+                isValid = false;
+            } else {
+                hideError('privacyError');
+            }
+
+            return isValid;
+        }
+
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
         }
 
         function showError(elementId, message) {
@@ -735,6 +950,23 @@
                     formData.contactName = document.getElementById('contactName').value.trim();
                     formData.companySize = document.getElementById('companySize').value;
                     break;
+                case 4:
+                    const challengeElement = document.querySelector('input[name="challenge"]:checked');
+                    if (challengeElement) {
+                        formData.challenge = challengeElement.value;
+                    }
+                    break;
+                case 5:
+                    const goalElement = document.querySelector('input[name="goal"]:checked');
+                    if (goalElement) {
+                        formData.goal = goalElement.value;
+                    }
+                    break;
+                case 7:
+                    formData.contactEmail = document.getElementById('contactEmail').value.trim();
+                    formData.contactPhone = document.getElementById('contactPhone').value.trim();
+                    formData.privacyConsent = document.getElementById('privacyConsent').checked;
+                    break;
             }
         }
 
@@ -750,9 +982,231 @@
             }
         }
 
+        function updateSubmitButton() {
+            const email = document.getElementById('contactEmail').value.trim();
+            const privacy = document.getElementById('privacyConsent').checked;
+            const button = document.getElementById('submitBtn');
+            
+            if (email && isValidEmail(email) && privacy) {
+                button.disabled = false;
+            } else {
+                button.disabled = true;
+            }
+        }
+
+        function handlePrivacyChange() {
+            const checkbox = document.getElementById('privacyConsent');
+            formData.privacyConsent = checkbox.checked;
+            updateSubmitButton();
+        }
+
+        // Form submission
+        function submitForm() {
+            if (!validateStep7()) {
+                return;
+            }
+
+            saveCurrentStepData();
+
+            // Calculate total score
+            let totalScore = 0;
+            Object.values(formData.assessmentAnswers).forEach(answer => {
+                totalScore += answer.points;
+            });
+            formData.totalScore = totalScore;
+
+            // Save to session storage
+            sessionStorage.setItem('flowmasterAssessment', JSON.stringify(formData));
+
+            // Submit to webhook (simplified)
+            submitToWebhook(formData).then(() => {
+                setTimeout(() => {
+                    hideCurrentStep();
+                    currentStep = 8;
+                    showCurrentStep();
+                    updateProgress();
+                }, 2000);
+            }).catch(() => {
+                // Still proceed to thank you page
+                setTimeout(() => {
+                    hideCurrentStep();
+                    currentStep = 8;
+                    showCurrentStep();
+                    updateProgress();
+                }, 2000);
+            });
+        }
+
+        async function submitToWebhook(data) {
+            const webhookUrls = [
+                'https://hooks.zapier.com/hooks/catch/19290687/2nskxsx/',
+                'https://hook.eu1.make.com/flowmaster-pro-v4'
+            ];
+
+            for (let url of webhookUrls) {
+                try {
+                    await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data),
+                        mode: 'no-cors'
+                    });
+                    return;
+                } catch (error) {
+                    console.error('Webhook failed:', error);
+                }
+            }
+        }
+
+        // PDF Generation
+        function downloadAssessmentReport() {
+            const sessionData = sessionStorage.getItem('flowmasterAssessment');
+            
+            if (sessionData) {
+                try {
+                    const data = JSON.parse(sessionData);
+                    
+                    // Check if jsPDF is available
+                    let jsPDFClass;
+                    if (typeof window.jsPDF !== 'undefined') {
+                        jsPDFClass = window.jsPDF;
+                    } else if (typeof jsPDF !== 'undefined') {
+                        jsPDFClass = jsPDF;
+                    } else {
+                        alert('PDF library kon niet worden geladen. Probeer de pagina te vernieuwen.');
+                        return;
+                    }
+
+                    // Generate PDF
+                    const doc = new jsPDFClass();
+                    const pageWidth = doc.internal.pageSize.width;
+                    let yPos = 40;
+
+                    // Header
+                    doc.setFillColor(102, 126, 234);
+                    doc.rect(0, 0, pageWidth, 30, 'F');
+                    
+                    doc.setTextColor(255, 255, 255);
+                    doc.setFontSize(20);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('FlowMaster Pro V4 - Assessment Rapport', 20, 20);
+                    
+                    doc.setTextColor(0, 0, 0);
+                    yPos = 45;
+
+                    // Company Information
+                    doc.setFontSize(16);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('BEDRIJFSINFORMATIE', 20, yPos);
+                    yPos += 15;
+
+                    doc.setFontSize(12);
+                    doc.setFont('helvetica', 'normal');
+                    doc.text(`Bedrijf: ${data.companyName}`, 20, yPos);
+                    yPos += 10;
+                    doc.text(`Contactpersoon: ${data.contactName}`, 20, yPos);
+                    yPos += 10;
+                    doc.text(`E-mail: ${data.contactEmail}`, 20, yPos);
+                    yPos += 10;
+                    if (data.contactPhone) {
+                        doc.text(`Telefoon: ${data.contactPhone}`, 20, yPos);
+                        yPos += 10;
+                    }
+                    if (data.companySize) {
+                        doc.text(`Bedrijfsgrootte: ${data.companySize}`, 20, yPos);
+                        yPos += 10;
+                    }
+                    
+                    yPos += 20;
+
+                    // Assessment Results
+                    doc.setFontSize(16);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('ASSESSMENT RESULTATEN', 20, yPos);
+                    yPos += 15;
+
+                    // Score display
+                    doc.setFillColor(240, 248, 255);
+                    doc.rect(20, yPos - 5, pageWidth - 40, 40, 'F');
+                    
+                    doc.setFontSize(14);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('Totaal Score:', 30, yPos + 10);
+                    
+                    doc.setFontSize(24);
+                    doc.setTextColor(102, 126, 234);
+                    doc.text(`${data.totalScore}/240`, 110, yPos + 15);
+                    
+                    doc.setTextColor(0, 0, 0);
+                    yPos += 50;
+
+                    // Recommendations
+                    doc.setFontSize(16);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('AANBEVELINGEN', 20, yPos);
+                    yPos += 15;
+
+                    doc.setFontSize(12);
+                    doc.setFont('helvetica', 'normal');
+                    
+                    const recommendations = [
+                        'Implementeer een gestructureerd recruitment proces',
+                        'Investeer in employer branding activiteiten',
+                        'Overweeg moderne recruitment tools en ATS systemen',
+                        'Meet en track recruitment KPIs voor betere resultaten'
+                    ];
+
+                    recommendations.forEach(rec => {
+                        doc.text(`• ${rec}`, 20, yPos);
+                        yPos += 10;
+                    });
+
+                    yPos += 20;
+
+                    // Next Steps
+                    doc.setFontSize(16);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('VERVOLGSTAPPEN', 20, yPos);
+                    yPos += 15;
+
+                    doc.setFontSize(12);
+                    doc.setFont('helvetica', 'normal');
+                    doc.text('1. Bel ons voor een gratis strategiesessie: +31 614 314 593', 20, yPos);
+                    yPos += 10;
+                    doc.text('2. Plan een uitgebreide recruitment audit', 20, yPos);
+                    yPos += 10;
+                    doc.text('3. Implementeer de aanbevolen verbeteringen', 20, yPos);
+                    yPos += 10;
+                    doc.text('4. Start met het optimaliseren van je recruitment proces', 20, yPos);
+
+                    // Footer
+                    const footerY = doc.internal.pageSize.height - 30;
+                    doc.setDrawColor(102, 126, 234);
+                    doc.line(20, footerY, pageWidth - 20, footerY);
+                    
+                    doc.setFontSize(10);
+                    doc.text('Recruitin BV | Wouter Arts | wouter@recruitin.nl | +31 614 314 593', 20, footerY + 10);
+                    doc.text(`Assessment ID: ${data.assessment_id} | Gegenereerd: ${new Date().toLocaleDateString('nl-NL')}`, 20, footerY + 20);
+
+                    // Save PDF
+                    const fileName = `FlowMaster_Rapport_${data.companyName.replace(/[^a-zA-Z0-9]/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+                    doc.save(fileName);
+                    
+                } catch (error) {
+                    console.error('PDF generation error:', error);
+                    alert('Er is een fout opgetreden bij het genereren van het rapport.');
+                }
+            } else {
+                alert('Geen assessment data gevonden. Vul eerst de assessment in.');
+            }
+        }
+
         // Event listeners
         document.getElementById('companyName').addEventListener('input', updateStep2Button);
         document.getElementById('contactName').addEventListener('input', updateStep2Button);
+        document.getElementById('contactEmail').addEventListener('input', updateSubmitButton);
+        document.getElementById('contactPhone').addEventListener('input', updateSubmitButton);
+        document.getElementById('privacyConsent').addEventListener('change', handlePrivacyChange);
 
         // Initialize
         updateProgress();
