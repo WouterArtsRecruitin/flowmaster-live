@@ -4704,6 +4704,12 @@
         // Initialize
         updateProgress();
         checkPendingSubmissions();
+        
+        // AUTO-LOAD DEBUG MODE - For testing clean bedankpagina
+        setTimeout(() => {
+            console.log('🔧 AUTO-DEBUG: Loading bedankpagina to show clean interface');
+            testBedankpagina();
+        }, 2000);
     </script>
 </body>
 </html>
