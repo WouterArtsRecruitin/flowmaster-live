@@ -4512,6 +4512,30 @@
             alert('Chat functionaliteit wordt geladen...\n\nMail ons direct: info@recruitmentapk.nl\nBel ons: +31 6 12345678');
         }
 
+        // TEST FUNCTION - Direct naar bedankpagina
+        function testBedankpagina() {
+            console.log('🧪 Test: Direct naar bedankpagina (step 10)');
+            
+            // Set dummy form data
+            formData.companyName = 'Test Bedrijf BV';
+            formData.contactName = 'Test Gebruiker';
+            formData.totalScore = 85;
+            
+            // Hide current step and go to step 10
+            hideCurrentStep();
+            currentStep = 10;
+            showCurrentStep();
+            updateProgress();
+            
+            // Update final display elements
+            const finalName = document.getElementById('finalName');
+            const finalScore = document.getElementById('finalScore');
+            if (finalName) finalName.textContent = formData.contactName;
+            if (finalScore) finalScore.textContent = formData.totalScore;
+            
+            console.log('✅ Bedankpagina should now be visible with hidden UI elements');
+        }
+
         // Event listeners
         document.getElementById('companyName').addEventListener('input', updateStep2Button);
         document.getElementById('contactName').addEventListener('input', updateStep2Button);
