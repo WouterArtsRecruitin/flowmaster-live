@@ -4721,6 +4721,21 @@
         // Initialize
         updateProgress();
         checkPendingSubmissions();
+        
+        // Debug: Test if functions are available
+        console.log('🔧 DEBUG: Functions available:', {
+            nextStep: typeof nextStep,
+            validateCurrentStep: typeof validateCurrentStep,
+            showCurrentStep: typeof showCurrentStep,
+            hideCurrentStep: typeof hideCurrentStep
+        });
+        
+        // Test button clicks
+        window.addEventListener('click', function(e) {
+            if (e.target.tagName === 'BUTTON') {
+                console.log('🔧 Button clicked:', e.target.textContent, 'onclick:', e.target.getAttribute('onclick'));
+            }
+        });
     </script>
 </body>
 </html>
