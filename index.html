@@ -4598,7 +4598,8 @@
 
         // COMPREHENSIVE TEST FUNCTION
         function runFullTest() {
-            console.log('🔬 Running comprehensive FlowMaster Pro test...');
+            console.log('🔬 Running comprehensive FlowMaster Pro double-check...');
+            let allTestsPassed = true;
             
             // Test 1: PDF Library availability
             console.log('1️⃣ Testing PDF library...');
@@ -4606,6 +4607,7 @@
                 console.log('✅ PDF library available');
             } else {
                 console.warn('❌ PDF library not available');
+                allTestsPassed = false;
             }
             
             // Test 2: Form validation
@@ -4620,30 +4622,76 @@
             validationTests.forEach(test => {
                 if (test.email) {
                     const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(test.email);
-                    console.log(`Email ${test.email}: ${isValid === test.valid ? '✅' : '❌'}`);
+                    const result = isValid === test.valid;
+                    console.log(`Email ${test.email}: ${result ? '✅' : '❌'}`);
+                    if (!result) allTestsPassed = false;
                 }
                 if (test.phone) {
                     const isValid = test.phone.length >= 8;
-                    console.log(`Phone ${test.phone}: ${isValid === test.valid ? '✅' : '❌'}`);
+                    const result = isValid === test.valid;
+                    console.log(`Phone ${test.phone}: ${result ? '✅' : '❌'}`);
+                    if (!result) allTestsPassed = false;
                 }
             });
             
-            // Test 3: Local storage functionality
-            console.log('3️⃣ Testing local storage...');
+            // Test 3: All steps exist
+            console.log('3️⃣ Testing all 10 steps exist...');
+            for (let i = 1; i <= 10; i++) {
+                const step = document.getElementById(`step${i}`);
+                if (step) {
+                    console.log(`✅ Step ${i} exists`);
+                } else {
+                    console.error(`❌ Step ${i} missing`);
+                    allTestsPassed = false;
+                }
+            }
+            
+            // Test 4: Key form elements exist
+            console.log('4️⃣ Testing form elements...');
+            const requiredElements = [
+                'companyName', 'contactName', 'contactEmail', 'contactPhone', 
+                'privacyConsent', 'progressFill', 'progressText'
+            ];
+            
+            requiredElements.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    console.log(`✅ Element ${id} exists`);
+                } else {
+                    console.error(`❌ Element ${id} missing`);
+                    allTestsPassed = false;
+                }
+            });
+            
+            // Test 5: Local storage functionality
+            console.log('5️⃣ Testing local storage...');
             try {
                 localStorage.setItem('test', 'value');
                 const value = localStorage.getItem('test');
                 localStorage.removeItem('test');
-                console.log(value === 'value' ? '✅ Local storage works' : '❌ Local storage failed');
+                if (value === 'value') {
+                    console.log('✅ Local storage works');
+                } else {
+                    console.warn('❌ Local storage failed');
+                    allTestsPassed = false;
+                }
             } catch (e) {
                 console.warn('❌ Local storage not available');
+                allTestsPassed = false;
             }
             
-            // Test 4: Go to bedankpagina with full data
-            console.log('4️⃣ Loading bedankpagina with test data...');
+            // Test 6: Go to bedankpagina with full data
+            console.log('6️⃣ Loading bedankpagina with test data...');
             testBedankpagina();
             
-            console.log('✅ Full test completed!');
+            // Final assessment
+            console.log('\n🎯 FINAL ASSESSMENT:');
+            console.log(allTestsPassed ? 
+                '🟢 ALL TESTS PASSED - Website is fully functional!' : 
+                '🔴 SOME TESTS FAILED - Check errors above'
+            );
+            
+            return allTestsPassed;
         }
 
         // Event listeners
