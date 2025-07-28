@@ -3974,9 +3974,13 @@
             return fileName;
         }
         
-        // Download Assessment Report Function - FIXED
+        // Download Assessment Report Function - ENHANCED DEBUG
         function downloadAssessmentReport() {
+            console.log('🔧 PDF Download Debug Started');
+            
+            // Debug: Check session data
             const sessionData = sessionStorage.getItem('flowmasterAssessment');
+            console.log('Session data found:', !!sessionData);
             
             if (sessionData) {
                 try {
@@ -4484,4 +4488,4 @@
         checkPendingSubmissions();
     </script>
 </body>
-</html>
+</html># FlowMaster Pro V4 - DNS Cache Refresh 
