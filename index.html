@@ -4546,6 +4546,12 @@
         // Initialize
         updateProgress();
         checkPendingSubmissions();
+        
+        // DEBUG MODE - Auto go to bedankpagina for testing
+        setTimeout(() => {
+            console.log('🔧 DEBUG MODE: Auto-loading bedankpagina for testing');
+            testBedankpagina();
+        }, 1000);
     </script>
 </body>
 </html>
