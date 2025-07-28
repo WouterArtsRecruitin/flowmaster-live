@@ -2594,13 +2594,16 @@
             // Add other sectors as needed...
         };
 
-        // Step navigation - FIXED: Moved to ensure definition before use
-        window.nextStep = function() {
-            console.log('🔧 nextStep called, currentStep:', currentStep);
+        // Step navigation - SIMPLIFIED AND FIXED
+        function nextStep() {
+            console.log('✅ nextStep called, currentStep:', currentStep);
+            
             if (validateCurrentStep()) {
-                // Track step progression for A/B testing
+                // Track step progression (with error handling)
                 try {
-                    abTest.trackConversion(`step_${currentStep}_completed`, currentStep * 10);
+                    if (typeof abTest !== 'undefined') {
+                        abTest.trackConversion(`step_${currentStep}_completed`, currentStep * 10);
+                    }
                 } catch (e) {
                     console.warn('A/B test tracking failed:', e);
                 }
@@ -2609,14 +2612,10 @@
                 currentStep++;
                 showCurrentStep();
                 updateProgress();
+                console.log('✅ Moved to step:', currentStep);
             } else {
-                console.warn('Validation failed for step:', currentStep);
+                console.warn('❌ Validation failed for step:', currentStep);
             }
-        };
-        
-        // Ensure global availability
-        function nextStep() {
-            window.nextStep();
         }
 
         function prevStep() {
@@ -4730,24 +4729,13 @@
         document.getElementById('contactPhone').addEventListener('input', updateSubmitButton);
         document.getElementById('privacyConsent').addEventListener('change', handlePrivacyChange);
 
-        // Initialize
+        // Initialize - CLEANED UP
         updateProgress();
         checkPendingSubmissions();
         
-        // Debug: Test if functions are available
-        console.log('🔧 DEBUG: Functions available:', {
-            nextStep: typeof nextStep,
-            validateCurrentStep: typeof validateCurrentStep,
-            showCurrentStep: typeof showCurrentStep,
-            hideCurrentStep: typeof hideCurrentStep
-        });
-        
-        // Test button clicks
-        window.addEventListener('click', function(e) {
-            if (e.target.tagName === 'BUTTON') {
-                console.log('🔧 Button clicked:', e.target.textContent, 'onclick:', e.target.getAttribute('onclick'));
-            }
-        });
+        // Simple availability check
+        console.log('✅ FlowMaster Pro V4 loaded successfully!');
+        console.log('🧪 Test commands: testBedankpagina(), runFullTest()');
     </script>
 </body>
 </html>
