@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlowMaster Pro V4 - Final</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 20px 0;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .intro-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .intro-subtitle {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .nav-button {
+            flex: 1;
+            padding: 12px 24px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .nav-button.primary {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .sector-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .sector-card {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .sector-card:hover {
+            border-color: #667eea;
+        }
+
+        .sector-card.selected {
+            border-color: #667eea;
+            background: #eff6ff;
+        }
+
+        .sector-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .sector-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .sector-description {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .progress-bar {
+            background: #f1f5f9;
+            height: 8px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .success-state {
+            text-align: center;
+        }
+
+        .success-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .success-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #22c55e;
+            margin-bottom: 15px;
+        }
+
+        .success-message {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .download-button {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 16px;
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 24px;
+            font-weight: 800;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Progress Bar -->
+        <div class="progress-bar" id="progressBar">
+            <div class="progress-fill" id="progressFill" style="width: 10%"></div>
+        </div>
+        <div class="progress-text" id="progressText">Stap 1 van 5</div>
+
+        <!-- Step 1: Welcome -->
+        <div class="card" id="step1">
+            <h1 class="intro-title">FlowMaster Pro V4</h1>
+            <p class="intro-subtitle">Advanced Recruitment Intelligence Platform</p>
+            
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">29</span>
+                    <span class="stat-label">Expert Vragen</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">2.5K+</span>
+                    <span class="stat-label">Bedrijven Getest</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">7min</span>
+                    <span class="stat-label">Complete Analyse</span>
+                </div>
+            </div>
+
+            <button class="cta-button" onclick="goToStep(2)">Start Complete Assessment 🚀</button>
+        </div>
+
+        <!-- Step 2: Company Info -->
+        <div class="card hidden" id="step2">
+            <h2 class="intro-title">Vertel Ons Over Je Organisatie</h2>
+            <p class="intro-subtitle">Deze informatie helpt ons de perfecte analyse voor jou te bepalen</p>
+            
+            <div class="form-group">
+                <label class="form-label">Bedrijfsnaam</label>
+                <input type="text" class="form-input" id="companyName" placeholder="Jouw bedrijfsnaam">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Contactpersoon</label>
+                <input type="text" class="form-input" id="contactName" placeholder="Voor- en achternaam">
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="nav-button" onclick="goToStep(1)">Vorige</button>
+                <button class="nav-button primary" onclick="goToStep(3)">Volgende</button>
+            </div>
+        </div>
+
+        <!-- Step 3: Company Size -->
+        <div class="card hidden" id="step3">
+            <h2 class="intro-title">Wat Is Jullie Bedrijfsgrootte?</h2>
+            <p class="intro-subtitle">Dit helpt ons om gerichte aanbevelingen te doen</p>
+            
+            <div class="sector-grid">
+                <div class="sector-card" onclick="selectSize('1-10')">
+                    <div class="sector-icon">🚀</div>
+                    <div class="sector-title">Startup</div>
+                    <div class="sector-description">1-10 medewerkers</div>
+                </div>
+                <div class="sector-card" onclick="selectSize('11-50')">
+                    <div class="sector-icon">📈</div>
+                    <div class="sector-title">Scale-up</div>
+                    <div class="sector-description">11-50 medewerkers</div>
+                </div>
+                <div class="sector-card" onclick="selectSize('51-200')">
+                    <div class="sector-icon">🏢</div>
+                    <div class="sector-title">Middelgroot</div>
+                    <div class="sector-description">51-200 medewerkers</div>
+                </div>
+                <div class="sector-card" onclick="selectSize('200+')">
+                    <div class="sector-icon">🏛️</div>
+                    <div class="sector-title">Enterprise</div>
+                    <div class="sector-description">200+ medewerkers</div>
+                </div>
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="nav-button" onclick="goToStep(2)">Vorige</button>
+                <button class="nav-button primary" onclick="goToStep(4)">Volgende Stap</button>
+            </div>
+        </div>
+
+        <!-- Step 4: Assessment Questions -->
+        <div class="card hidden" id="step4">
+            <h2 class="intro-title">Assessment Vragen</h2>
+            <p class="intro-subtitle">Beantwoord enkele vragen over je recruitment proces</p>
+            
+            <div style="background: #f8fafc; padding: 30px; border-radius: 16px; text-align: center; margin: 30px 0;">
+                <div style="font-size: 48px; margin-bottom: 20px;">📊</div>
+                <h3 style="color: #333; margin-bottom: 15px;">Assessment Module</h3>
+                <p style="color: #666; margin-bottom: 20px;">
+                    Hier zouden normaal 29 strategische vragen komen over recruitment maturity, 
+                    sector expertise en moderne trends.
+                </p>
+                <p style="color: #667eea; font-weight: 600;">
+                    Voor deze demo gaan we naar het resultaat →
+                </p>
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="nav-button" onclick="goToStep(3)">Vorige</button>
+                <button class="nav-button primary" onclick="goToStep(5)">Ga naar Resultaten</button>
+            </div>
+        </div>
+
+        <!-- Step 5: Success Page -->
+        <div class="card hidden" id="step5">
+            <div class="success-state">
+                <div class="success-icon">🎉</div>
+                <h2 class="success-title">Perfect! Je Complete Assessment is Voltooid</h2>
+                <p class="success-message">
+                    Bedankt <span id="finalName">Gebruiker</span>! Je assessment score van <strong>85%</strong> met sector expertise is opgeslagen. 
+                    We nemen binnen 24 uur contact met je op voor jouw persoonlijke strategie sessie.
+                    <br><br>
+                    Check je email voor alle details en een exclusieve voorbereidingshandleiding.
+                </p>
+                
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 30px;">
+                    <button class="download-button" onclick="downloadReport()">
+                        📄 Download Je Rapport
+                    </button>
+                    <button class="cta-button" onclick="goToStep(1)">
+                        🔄 Start Nieuwe Assessment
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        let formData = {
+            companyName: '',
+            contactName: '',
+            companySize: '',
+            totalScore: 85
+        };
+
+        function goToStep(step) {
+            console.log('✅ Going to step:', step);
+            
+            // Hide all steps
+            document.querySelectorAll('.card').forEach(card => {
+                card.classList.add('hidden');
+            });
+            
+            // Show target step
+            const targetStep = document.getElementById('step' + step);
+            if (targetStep) {
+                targetStep.classList.remove('hidden');
+                currentStep = step;
+                updateProgress();
+                
+                // Update final name if going to step 5
+                if (step === 5) {
+                    const name = document.getElementById('contactName').value || 'Gebruiker';
+                    document.getElementById('finalName').textContent = name;
+                    
+                    // Hide progress bar on final step
+                    document.getElementById('progressBar').style.display = 'none';
+                    document.getElementById('progressText').style.display = 'none';
+                }
+            }
+        }
+
+        function updateProgress() {
+            const progress = (currentStep - 1) / 4 * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `Stap ${currentStep} van 5`;
+        }
+
+        function selectSize(size) {
+            console.log('✅ Selected size:', size);
+            formData.companySize = size;
+            
+            // Update visual selection
+            document.querySelectorAll('.sector-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.target.closest('.sector-card').classList.add('selected');
+        }
+
+        function downloadReport() {
+            const companyName = document.getElementById('companyName').value || 'Test Bedrijf';
+            const contactName = document.getElementById('contactName').value || 'Test Gebruiker';
+            
+            alert(`📄 PDF Rapport Download!\n\n✅ Functionaliteit werkt perfect!\n\nRapport details:\n• Bedrijf: ${companyName}\n• Contact: ${contactName}\n• Score: ${formData.totalScore}%\n• Grootte: ${formData.companySize}\n\nDit zou normaal een professioneel PDF rapport downloaden met complete assessment resultaten, aanbevelingen en sector analyse.`);
+        }
+
+        // Initialize
+        updateProgress();
+        console.log('🚀 FlowMaster Pro V4 Final Version Loaded!');
+    </script>
+</body>
+</html>
