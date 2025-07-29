@@ -1,0 +1,59 @@
+/ FlowMaster Pro Data Processor
+  console.log("Processing:", inputData);
+
+  const flowmasterId = 'FM-' + Date.now().toString(36).toUpperCase() + '-' +
+  Math.random().toString(36).substr(2,5).toUpperCase();
+
+  // Calculate score
+  let score = 0;
+
+  // Time to fill scoring
+  if (inputData.time_to_fill === '1-4 weken') score += 25;
+  else if (inputData.time_to_fill === '4-8 weken') score += 20;
+  else if (inputData.time_to_fill === '8-12 weken') score += 15;
+  else score += 10;
+
+  // Candidates scoring
+  if (inputData.qualified_candidates === 'Meer dan 10') score += 25;
+  else if (inputData.qualified_candidates === '5-10 kandidaten') score += 20;
+  else if (inputData.qualified_candidates === '2-5 kandidaten') score += 15;
+  else score += 10;
+
+  // ATS scoring
+  if (inputData.ats_usage === 'Ja, professioneel ATS systeem') score += 25;
+  else if (inputData.ats_usage === 'Basis tools (Excel, email)') score += 15;
+  else score += 5;
+
+  // Budget scoring
+  if (inputData.budget === 'Meer dan €50.000') score += 25;
+  else if (inputData.budget === '€25.000 - €50.000') score += 20;
+  else if (inputData.budget === '€10.000 - €25.000') score += 15;
+  else score += 10;
+
+  // Determine urgency
+  let urgency = 'medium';
+  if (score < 40) urgency = 'high';
+  else if (score >= 70) urgency = 'low';
+
+  // Output all data
+  output = [{
+    flowmaster_id: flowmasterId,
+    timestamp: new Date().toISOString(),
+    timestamp_nl: new Date().toLocaleDateString('nl-NL'),
+    name: inputData.name || '',
+    email: inputData.email || '',
+    company: inputData.company || '',
+    phone: inputData.phone || '',
+    role: inputData.role || '',
+    company_size: inputData.company_size || '',
+    time_to_fill: inputData.time_to_fill || '',
+    qualified_candidates: inputData.qualified_candidates || '',
+    ats_usage: inputData.ats_usage || '',
+    biggest_challenge: inputData.biggest_challenge || '',
+    budget: inputData.budget || '',
+    assessment_score: score,
+    urgency_level: urgency,
+    urgency_emoji: urgency === 'high' ? '🔴' : urgency === 'medium' ? '🟡' : '🟢',
+    status: 'Nieuw',
+    follow_up_days: urgency === 'high' ? 1 : urgency === 'medium' ? 2 : 7
+  }];
