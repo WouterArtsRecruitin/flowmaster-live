@@ -6,37 +6,50 @@
     <title>FlowMaster Pro V4 - Live Dashboard Assessment</title>
     <script src="https://apis.google.com/js/api.js" async defer></script>
     <script>
-        // Google API Loading with dynamic fallback
+        // Google API Loading with proper ready detection
         function loadGoogleAPI() {
             return new Promise((resolve, reject) => {
-                // Check if already loaded
-                if (typeof gapi !== 'undefined') {
+                // Check if already loaded and ready
+                if (typeof gapi !== 'undefined' && gapi.load) {
+                    console.log('✅ Google API already available');
                     resolve();
                     return;
                 }
 
-                // Try loading from alternative CDN
+                // Create script element
                 const script = document.createElement('script');
                 script.src = 'https://apis.google.com/js/api.js';
                 script.async = true;
                 script.defer = true;
                 
                 script.onload = () => {
-                    console.log('✅ Google API loaded successfully');
-                    resolve();
+                    console.log('📦 Google API script loaded, waiting for gapi object...');
+                    
+                    // Wait for gapi object to be available
+                    const checkGapi = () => {
+                        if (typeof gapi !== 'undefined' && gapi.load) {
+                            console.log('✅ Google API object ready');
+                            resolve();
+                        } else {
+                            console.log('⏳ Waiting for gapi object...');
+                            setTimeout(checkGapi, 100);
+                        }
+                    };
+                    
+                    checkGapi();
                 };
                 
                 script.onerror = () => {
-                    console.warn('⚠️ Google API failed to load from CDN');
-                    reject(new Error('Google API loading failed'));
+                    console.warn('❌ Google API script failed to load');
+                    reject(new Error('Google API script loading failed'));
                 };
                 
                 document.head.appendChild(script);
                 
-                // Timeout after 10 seconds
+                // Timeout after 15 seconds
                 setTimeout(() => {
                     reject(new Error('Google API loading timeout'));
-                }, 10000);
+                }, 15000);
             });
         }
     </script>
@@ -1570,22 +1583,32 @@
             formData.totalScore = Math.round((totalScore / maxPossibleScore) * 100);
         }
 
-        // Initialize Google Sheets API when page loads with retry logic
+        // Initialize Google Sheets API when page loads with better timing
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 FlowMaster Pro V4 Live Dashboard Loaded!');
             console.log('📊 Google Sheets Integration Loading...');
             console.log('🔒 Admin-only live dashboard updates');
             console.log('📱 Assessment ready with', assessmentQuestions.length, 'questions');
             
-            // Try to load Google API with retry
+            // Try to load Google API with proper timing
             loadGoogleAPI()
                 .then(() => {
-                    console.log('✅ Google API available, initializing Sheets...');
-                    setTimeout(initializeGoogleSheets, 1000); // Give API time to fully load
+                    console.log('✅ Google API ready, initializing Sheets integration...');
+                    // Give more time for API to be fully ready
+                    setTimeout(() => {
+                        initializeGoogleSheets()
+                            .then(success => {
+                                if (success) {
+                                    console.log('🎯 Google Sheets integration fully active!');
+                                } else {
+                                    console.log('📊 Using console logging fallback');
+                                }
+                            });
+                    }, 2000);
                 })
                 .catch(error => {
-                    console.warn('⚠️ Google API loading failed:', error.message);
-                    console.log('📊 Assessment will work with console logging fallback');
+                    console.warn('⚠️ Google API unavailable:', error.message);
+                    console.log('📊 Assessment will work with console logging only');
                 });
         });
 
