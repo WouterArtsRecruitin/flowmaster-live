@@ -1458,3 +1458,87 @@
             if (questionTextEl) questionTextEl.textContent = questionData.question;
 
             if (optionsContainerEl) {
+                optionsContainerEl.innerHTML = '';
+                questionData.options.forEach((option, index) => {
+                    const optionEl = document.createElement('div');
+                    optionEl.className = 'assessment-option';
+                    optionEl.onclick = () => selectAssessmentOption(formData.currentQuestion, option.points, optionEl);
+                    
+                    const optionTextEl = document.createElement('div');
+                    optionTextEl.className = 'assessment-option-text';
+                    optionTextEl.textContent = option.text;
+                    
+                    optionEl.appendChild(optionTextEl);
+                    optionsContainerEl.appendChild(optionEl);
+                });
+            }
+
+            const nextButton = document.getElementById('assessmentNext');
+            if (nextButton) {
+                nextButton.disabled = true;
+                if (formData.currentQuestion === assessmentQuestions.length) {
+                    nextButton.textContent = 'Ga naar Resultaten';
+                } else {
+                    nextButton.textContent = 'Volgende Vraag';
+                }
+            }
+        }
+
+        function selectAssessmentOption(questionId, points, selectedElement) {
+            document.querySelectorAll('.assessment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            selectedElement.classList.add('selected');
+            formData.answers[questionId - 1] = points;
+            
+            const nextButton = document.getElementById('assessmentNext');
+            if (nextButton) {
+                nextButton.disabled = false;
+            }
+        }
+
+        function nextAssessmentQuestion() {
+            if (!formData.answers.hasOwnProperty(formData.currentQuestion - 1)) {
+                alert('⚠️ Selecteer eerst een antwoord!');
+                return;
+            }
+
+            if (formData.currentQuestion === assessmentQuestions.length) {
+                calculateFinalScore();
+                goToStep(6);
+            } else {
+                formData.currentQuestion++;
+                displayCurrentQuestion();
+            }
+        }
+
+        function calculateFinalScore() {
+            let totalScore = 0;
+            let maxPossibleScore = assessmentQuestions.length * 10;
+            
+            Object.values(formData.answers).forEach(points => {
+                totalScore += points;
+            });
+            
+            formData.totalScore = Math.round((totalScore / maxPossibleScore) * 100);
+        }
+
+        // Initialize Google Sheets API when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof gapi !== 'undefined') {
+                initializeGoogleSheets();
+            } else {
+                console.warn('⚠️ Google API not loaded, check if script is included in HTML head');
+            }
+        });
+
+        // Initialize
+        updateProgress();
+        console.log('🚀 FlowMaster Pro V4 Live Dashboard Loaded!');
+        console.log('📊 Google Sheets Integration Active');
+        console.log('🔒 Admin-only live dashboard updates');
+        console.log('📱 Assessment ready with', assessmentQuestions.length, 'questions');
+    </script>
+</body>
+</html>
