@@ -867,11 +867,22 @@
             }
         ];
 
-        // Initialize Google Sheets API
+        // Initialize Google Sheets API with proper loading check
         async function initializeGoogleSheets() {
             try {
-                await new Promise((resolve) => {
-                    gapi.load('auth2:client', resolve);
+                // Check if gapi is loaded
+                if (typeof gapi === 'undefined') {
+                    console.error('❌ Google API not loaded - falling back to console logging');
+                    return false;
+                }
+
+                await new Promise((resolve, reject) => {
+                    gapi.load('auth2:client', {
+                        callback: resolve,
+                        onerror: reject,
+                        timeout: 10000,
+                        ontimeout: reject
+                    });
                 });
                 
                 await gapi.client.init({
@@ -883,21 +894,28 @@
                 
                 googleAuth = gapi.auth2.getAuthInstance();
                 sheetsInitialized = true;
-                console.log('✅ Google Sheets API initialized');
+                console.log('✅ Google Sheets API initialized successfully');
                 
                 await setupSheetHeaders();
                 return true;
             } catch (error) {
                 console.error('❌ Google Sheets API initialization failed:', error);
+                console.log('📊 Falling back to console logging only');
                 return false;
             }
         }
 
-        // Setup sheet headers
+        // Setup sheet headers with better error handling
         async function setupSheetHeaders() {
             try {
+                if (typeof gapi === 'undefined' || !googleAuth) {
+                    console.log('⚠️ Google API not available, skipping header setup');
+                    return;
+                }
+
                 if (!googleAuth.isSignedIn.get()) {
-                    await googleAuth.signIn();
+                    console.log('📝 User not signed in, will prompt on first use');
+                    return;
                 }
 
                 const headers = [
@@ -928,45 +946,11 @@
                         }
                     });
 
-                    await gapi.client.sheets.spreadsheets.batchUpdate({
-                        spreadsheetId: GOOGLE_SHEETS_CONFIG.spreadsheetId,
-                        resource: {
-                            requests: [
-                                {
-                                    repeatCell: {
-                                        range: {
-                                            sheetId: 0,
-                                            startRowIndex: 0,
-                                            endRowIndex: 1,
-                                            startColumnIndex: 0,
-                                            endColumnIndex: headers.length
-                                        },
-                                        cell: {
-                                            userEnteredFormat: {
-                                                textFormat: { bold: true },
-                                                backgroundColor: { red: 0.9, green: 0.9, blue: 0.9 }
-                                            }
-                                        },
-                                        fields: 'userEnteredFormat(textFormat,backgroundColor)'
-                                    }
-                                },
-                                {
-                                    updateSheetProperties: {
-                                        properties: {
-                                            sheetId: 0,
-                                            gridProperties: { frozenRowCount: 1 }
-                                        },
-                                        fields: 'gridProperties.frozenRowCount'
-                                    }
-                                }
-                            ]
-                        }
-                    });
-
                     console.log('✅ Sheet headers configured');
                 }
             } catch (error) {
                 console.error('❌ Error setting up sheet headers:', error);
+                console.log('📊 Headers will be created manually if needed');
             }
         }
 
@@ -1053,7 +1037,7 @@
             }
         }
 
-        // Modified submitContact function with Google Sheets integration
+        // Modified submitContact function with better error handling
         function submitContactWithSheets() {
             const contactData = {
                 timestamp: new Date().toLocaleString('nl-NL'),
@@ -1081,49 +1065,76 @@
 
             const submitButton = document.querySelector('#step6 .cta-button');
             const originalText = submitButton.textContent;
-            submitButton.textContent = '📊 Toevoegen aan Live Dashboard...';
+            submitButton.textContent = '📊 Verwerken Assessment...';
             submitButton.disabled = true;
 
             const isAdmin = contactData.email.toLowerCase().includes('warts@') || 
                            contactData.email.toLowerCase().includes('wouter@') ||
                            contactData.email.toLowerCase().includes('recruitin.nl');
 
+            // Always log complete data to console for admin
+            console.log('📊 COMPLETE FLOWMASTER ASSESSMENT DATA:');
+            console.log('==========================================');
+            console.log(`🏢 Bedrijf: ${contactData.company}`);
+            console.log(`👤 Naam: ${contactData.name}`);
+            console.log(`📧 Email: ${contactData.email}`);
+            console.log(`📞 Telefoon: ${contactData.phone}`);
+            console.log(`🎯 Assessment Score: ${contactData.assessment_score}%`);
+            console.log(`⚡ Urgentie Level: ${contactData.urgency_level}`);
+            console.log(`🔥 Lead Score: ${contactData.lead_score}/100`);
+            console.log(`⚠️ Pijn Level: ${contactData.pain_level}`);
+            console.log(`📊 Sector: ${contactData.sector}`);
+            console.log(`🏢 Company Size: ${contactData.company_size}`);
+            console.log('==========================================');
+            console.log('📋 Alle 29 Assessment Antwoorden:');
+            for (let i = 1; i <= 29; i++) {
+                const answerKey = `answer_${i.toString().padStart(2, '0')}`;
+                console.log(`Q${i.toString().padStart(2, '0')}: ${contactData[answerKey]}`);
+            }
+            console.log('==========================================');
+
             if (isAdmin) {
-                addToGoogleSheets(contactData)
-                    .then(result => {
-                        submitButton.textContent = originalText;
-                        submitButton.disabled = false;
-                        
-                        if (result.success) {
-                            console.log('✅ Admin Google Sheets update successful');
-                            console.log('📊 Sheet URL:', result.sheetUrl);
-                            showSuccessWithSheetsUpdate(contactData, result);
-                        } else {
-                            console.error('❌ Sheets update failed');
+                console.log('🔐 ADMIN EMAIL DETECTED - Attempting Google Sheets upload...');
+                
+                // Try Google Sheets first, fallback to CSV if it fails
+                if (typeof gapi !== 'undefined' && sheetsInitialized) {
+                    addToGoogleSheets(contactData)
+                        .then(result => {
+                            submitButton.textContent = originalText;
+                            submitButton.disabled = false;
+                            
+                            if (result.success) {
+                                console.log('✅ Google Sheets update successful');
+                                showSuccessWithSheetsUpdate(contactData, result);
+                            } else {
+                                console.log('⚠️ Google Sheets failed, showing console data');
+                                showSuccessMessage(contactData, false);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('❌ Google Sheets error:', error);
+                            console.log('📊 Data available in console logs above');
+                            submitButton.textContent = originalText;
+                            submitButton.disabled = false;
                             showSuccessMessage(contactData, false);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('❌ Sheets update error:', error);
+                        });
+                } else {
+                    console.log('⚠️ Google Sheets API not available');
+                    console.log('📊 Complete assessment data logged above for manual entry');
+                    setTimeout(() => {
                         submitButton.textContent = originalText;
                         submitButton.disabled = false;
                         showSuccessMessage(contactData, false);
-                    });
+                    }, 1000);
+                }
             } else {
+                // Regular user flow
                 setTimeout(() => {
                     submitButton.textContent = originalText;
                     submitButton.disabled = false;
                     showSuccessMessage(contactData, false);
                 }, 1000);
             }
-
-            console.log('📊 FLOWMASTER ASSESSMENT DATA:');
-            console.log('=================================');
-            console.log(`🏢 Bedrijf: ${contactData.company}`);
-            console.log(`👤 Naam: ${contactData.name}`);
-            console.log(`📧 Email: ${contactData.email}`);
-            console.log(`🎯 Assessment Score: ${contactData.assessment_score}%`);
-            console.log('=================================');
         }
 
         // Helper functions for enhanced data analysis
