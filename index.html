@@ -4,7 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FlowMaster Pro V4 - Live Dashboard Assessment</title>
-    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://apis.google.com/js/api.js" async defer></script>
+    <script>
+        // Google API Loading with dynamic fallback
+        function loadGoogleAPI() {
+            return new Promise((resolve, reject) => {
+                // Check if already loaded
+                if (typeof gapi !== 'undefined') {
+                    resolve();
+                    return;
+                }
+
+                // Try loading from alternative CDN
+                const script = document.createElement('script');
+                script.src = 'https://apis.google.com/js/api.js';
+                script.async = true;
+                script.defer = true;
+                
+                script.onload = () => {
+                    console.log('✅ Google API loaded successfully');
+                    resolve();
+                };
+                
+                script.onerror = () => {
+                    console.warn('⚠️ Google API failed to load from CDN');
+                    reject(new Error('Google API loading failed'));
+                };
+                
+                document.head.appendChild(script);
+                
+                // Timeout after 10 seconds
+                setTimeout(() => {
+                    reject(new Error('Google API loading timeout'));
+                }, 10000);
+            });
+        }
+    </script>
     <style>
         * {
             margin: 0;
@@ -1535,21 +1570,27 @@
             formData.totalScore = Math.round((totalScore / maxPossibleScore) * 100);
         }
 
-        // Initialize Google Sheets API when page loads
+        // Initialize Google Sheets API when page loads with retry logic
         document.addEventListener('DOMContentLoaded', function() {
-            if (typeof gapi !== 'undefined') {
-                initializeGoogleSheets();
-            } else {
-                console.warn('⚠️ Google API not loaded, check if script is included in HTML head');
-            }
+            console.log('🚀 FlowMaster Pro V4 Live Dashboard Loaded!');
+            console.log('📊 Google Sheets Integration Loading...');
+            console.log('🔒 Admin-only live dashboard updates');
+            console.log('📱 Assessment ready with', assessmentQuestions.length, 'questions');
+            
+            // Try to load Google API with retry
+            loadGoogleAPI()
+                .then(() => {
+                    console.log('✅ Google API available, initializing Sheets...');
+                    setTimeout(initializeGoogleSheets, 1000); // Give API time to fully load
+                })
+                .catch(error => {
+                    console.warn('⚠️ Google API loading failed:', error.message);
+                    console.log('📊 Assessment will work with console logging fallback');
+                });
         });
 
         // Initialize
         updateProgress();
-        console.log('🚀 FlowMaster Pro V4 Live Dashboard Loaded!');
-        console.log('📊 Google Sheets Integration Active');
-        console.log('🔒 Admin-only live dashboard updates');
-        console.log('📱 Assessment ready with', assessmentQuestions.length, 'questions');
     </script>
 </body>
 </html>
