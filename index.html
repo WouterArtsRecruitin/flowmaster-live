@@ -1144,7 +1144,10 @@
             if (isAdmin) {
                 console.log('🔐 ADMIN EMAIL DETECTED - Attempting Google Sheets upload...');
                 
-                // Try Google Sheets first, fallback to CSV if it fails
+                // ADMIN GETS CSV DOWNLOAD BACKUP
+                createCSVDownload(contactData);
+                
+                // Try Google Sheets first, with triple backup if it fails
                 if (typeof gapi !== 'undefined' && sheetsInitialized) {
                     addToGoogleSheets(contactData)
                         .then(result => {
@@ -1155,24 +1158,24 @@
                                 console.log('✅ Google Sheets update successful');
                                 showSuccessWithSheetsUpdate(contactData, result);
                             } else {
-                                console.log('⚠️ Google Sheets failed, showing console data');
-                                showSuccessMessage(contactData, false);
+                                console.log('⚠️ Google Sheets failed, using backup methods');
+                                showSuccessWithTripleBackup(contactData);
                             }
                         })
                         .catch(error => {
                             console.error('❌ Google Sheets error:', error);
-                            console.log('📊 Data available in console logs above');
+                            console.log('📊 Using triple backup: CSV + Console + Email data');
                             submitButton.textContent = originalText;
                             submitButton.disabled = false;
-                            showSuccessMessage(contactData, false);
+                            showSuccessWithTripleBackup(contactData);
                         });
                 } else {
                     console.log('⚠️ Google Sheets API not available');
-                    console.log('📊 Complete assessment data logged above for manual entry');
+                    console.log('📊 Using triple backup: CSV + Console + Copy-paste ready');
                     setTimeout(() => {
                         submitButton.textContent = originalText;
                         submitButton.disabled = false;
-                        showSuccessMessage(contactData, false);
+                        showSuccessWithTripleBackup(contactData);
                     }, 1000);
                 }
             } else {
@@ -1185,7 +1188,93 @@
             }
         }
 
-        // Helper functions for enhanced data analysis
+        // Enhanced CSV Download with folder selection (modern browsers)
+        async function createCSVDownload(contactData) {
+            try {
+                console.log('📄 Creating backup CSV download...');
+                
+                // Create CSV content first
+                const headers = [
+                    'Timestamp', 'Naam', 'Email', 'Telefoon', 'Bedrijf', 'Sector', 'Bedrijfsgrootte',
+                    'Assessment_Score', 'Voltooiing_Percentage', 'Urgentie_Level', 'Lead_Score', 'Pijn_Level'
+                ];
+
+                for (let i = 1; i <= 29; i++) {
+                    headers.push(`Vraag_${i.toString().padStart(2, '0')}`);
+                }
+
+                const dataRow = [
+                    contactData.timestamp, contactData.name, contactData.email, contactData.phone,
+                    contactData.company, contactData.sector, contactData.company_size,
+                    contactData.assessment_score, contactData.completion_rate, contactData.urgency_level,
+                    contactData.lead_score, contactData.pain_level
+                ];
+
+                for (let i = 1; i <= 29; i++) {
+                    dataRow.push(contactData[`answer_${i.toString().padStart(2, '0')}`]);
+                }
+
+                const csvContent = '\uFEFF' + [
+                    headers.join(','),
+                    dataRow.map(field => `"${field}"`).join(',')
+                ].join('\n');
+
+                const fileName = `FlowMaster_${contactData.company.replace(/[^a-z0-9]/gi, '_')}_${new Date().toISOString().split('T')[0]}.csv`;
+
+                // Try modern File System Access API first (Chrome/Edge)
+                if ('showSaveFilePicker' in window) {
+                    try {
+                        console.log('💾 Using modern file picker for custom location...');
+                        
+                        const fileHandle = await window.showSaveFilePicker({
+                            suggestedName: fileName,
+                            types: [{
+                                description: 'CSV files',
+                                accept: {
+                                    'text/csv': ['.csv'],
+                                },
+                            }],
+                        });
+
+                        const writable = await fileHandle.createWritable();
+                        await writable.write(csvContent);
+                        await writable.close();
+
+                        console.log(`✅ CSV saved to custom location: ${fileName}`);
+                        return { method: 'custom_location', fileName: fileName };
+                        
+                    } catch (error) {
+                        if (error.name === 'AbortError') {
+                            console.log('⚠️ User cancelled file picker, using default download');
+                        } else {
+                            console.warn('⚠️ File picker failed, using default download:', error);
+                        }
+                        // Fall through to default download method
+                    }
+                }
+
+                // Fallback to traditional download (all browsers)
+                console.log('📁 Using default Downloads folder...');
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                const url = URL.createObjectURL(blob);
+                
+                link.setAttribute('href', url);
+                link.setAttribute('download', fileName);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+
+                console.log(`✅ CSV downloaded to Downloads folder: ${fileName}`);
+                return { method: 'downloads_folder', fileName: fileName };
+                
+            } catch (error) {
+                console.error('❌ CSV download failed:', error);
+                return { method: 'failed', error: error.message };
+            }
+        }
         function calculateUrgencyLevel(answers) {
             let urgencyScore = 0;
             const urgencyQuestions = [2, 5, 13, 14, 17, 19, 23];
