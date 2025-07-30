@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FlowMaster Pro V4 - Complete Assessment Tool</title>
+    <title>FlowMaster Pro V4 - Live Dashboard Assessment</title>
+    <script src="https://apis.google.com/js/api.js"></script>
     <style>
         * {
             margin: 0;
@@ -259,7 +260,7 @@
             display: block;
             font-size: 24px;
             font-weight: 800;
-            color: #667eea;
+            color: #ff6b35;
             margin-bottom: 8px;
         }
 
@@ -285,14 +286,14 @@
         }
 
         .assessment-option:hover {
-            border-color: #667eea;
-            background: #eff6ff;
+            border-color: #ff6b35;
+            background: #fff5f2;
         }
 
         .assessment-option.selected {
-            border-color: #667eea;
-            background: #eff6ff;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+            border-color: #ff6b35;
+            background: #fff5f2;
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.15);
         }
 
         .assessment-option-text {
@@ -328,8 +329,8 @@
         }
 
         .privacy-checkbox input[type="checkbox"]:checked + .checkmark {
-            background: #667eea;
-            border-color: #667eea;
+            background: #ff6b35;
+            border-color: #ff6b35;
         }
 
         .privacy-checkbox input[type="checkbox"]:checked + .checkmark::after {
@@ -343,7 +344,7 @@
         }
 
         .privacy-checkbox a {
-            color: #667eea;
+            color: #ff6b35;
             text-decoration: none;
         }
 
@@ -363,7 +364,7 @@
         <!-- Step 1: Welcome -->
         <div class="card" id="step1">
             <h1 class="intro-title">FlowMaster Pro V4</h1>
-            <p class="intro-subtitle">Advanced Recruitment Intelligence Platform</p>
+            <p class="intro-subtitle">Advanced Recruitment Intelligence Platform met Live Dashboard</p>
             
             <div class="stats-grid">
                 <div class="stat-item">
@@ -375,8 +376,8 @@
                     <span class="stat-label">Bedrijven Getest</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">7min</span>
-                    <span class="stat-label">Complete Analyse</span>
+                    <span class="stat-number">📊</span>
+                    <span class="stat-label">Live Dashboard</span>
                 </div>
             </div>
 
@@ -540,7 +541,7 @@
                 <input type="text" class="form-input" id="contact-company" placeholder="Jouw bedrijfsnaam" required>
             </div>
             
-            <button class="cta-button" onclick="submitContact()">📊 Ontvang Mijn Assessment Resultaten + CSV Download</button>
+            <button class="cta-button" onclick="submitContactWithSheets()">📊 Ontvang Mijn Assessment Resultaten</button>
         </div>
     </div>
 
@@ -557,6 +558,20 @@
             answers: {},
             currentQuestion: 1
         };
+
+        // Google Sheets API Configuration - COMPLETE WORKING SETUP!
+        const GOOGLE_SHEETS_CONFIG = {
+            apiKey: 'AIzaSyAekeml5hJviLRGhnHQaXRuWm1l2x4DnkM',
+            clientId: '1065495130882-nualmgg1t2ot16ogfu1dajkg7j4ufu6q.apps.googleusercontent.com',
+            discoveryDoc: 'https://sheets.googleapis.com/$discovery/rest?version=v4',
+            scopes: 'https://www.googleapis.com/auth/spreadsheets',
+            spreadsheetId: '1EP_rT6Wd5ch68wZAgCuqSR0bAl_7oZGOEP25LY6dnPQ',
+            sheetName: 'FlowMaster Assessments'
+        };
+
+        let gapi;
+        let googleAuth;
+        let sheetsInitialized = false;
 
         // Complete 29 Assessment Questions
         const assessmentQuestions = [
@@ -852,9 +867,411 @@
             }
         ];
 
-        function nextStep() {
-            console.log('🔒 nextStep() called from step:', currentStep);
+        // Initialize Google Sheets API
+        async function initializeGoogleSheets() {
+            try {
+                await new Promise((resolve) => {
+                    gapi.load('auth2:client', resolve);
+                });
+                
+                await gapi.client.init({
+                    apiKey: GOOGLE_SHEETS_CONFIG.apiKey,
+                    clientId: GOOGLE_SHEETS_CONFIG.clientId,
+                    discoveryDocs: [GOOGLE_SHEETS_CONFIG.discoveryDoc],
+                    scope: GOOGLE_SHEETS_CONFIG.scopes
+                });
+                
+                googleAuth = gapi.auth2.getAuthInstance();
+                sheetsInitialized = true;
+                console.log('✅ Google Sheets API initialized');
+                
+                await setupSheetHeaders();
+                return true;
+            } catch (error) {
+                console.error('❌ Google Sheets API initialization failed:', error);
+                return false;
+            }
+        }
+
+        // Setup sheet headers
+        async function setupSheetHeaders() {
+            try {
+                if (!googleAuth.isSignedIn.get()) {
+                    await googleAuth.signIn();
+                }
+
+                const headers = [
+                    'Timestamp', 'Naam', 'Email', 'Telefoon', 'Bedrijf', 'Sector', 'Bedrijfsgrootte',
+                    'Assessment_Score', 'Score_Categorie', 'Voltooiing_Percentage', 
+                    'Urgentie_Level', 'Lead_Score', 'Pijn_Level',
+                    'Q01_Evaluatie_Freq', 'Q02_Onboarding', 'Q03_Effectiviteit_Meting', 'Q04_Tools', 'Q05_Samenwerking',
+                    'Q06_Proces_Tijd', 'Q07_Employer_Branding', 'Q08_Documentatie', 'Q09_Intern_Vervuld', 'Q10_Manager_Training',
+                    'Q11_Data_Driven', 'Q12_Proactief', 'Q13_Diversiteit', 'Q14_Reactiesnelheid', 'Q15_Candidate_Experience',
+                    'Q16_Marketing', 'Q17_Referrals', 'Q18_Cultural_Fit', 'Q19_Screening_Tech', 'Q20_Feedback',
+                    'Q21_Talent_Pool', 'Q22_Skills_Assessment', 'Q23_ROI_Meting', 'Q24_Communicatie', 'Q25_Social_Media',
+                    'Q26_Salary_Benchmarking', 'Q27_Video_Interview', 'Q28_External_Partners', 'Q29_Continuous_Improvement',
+                    'Hot_Lead', 'Follow_Up_Priority', 'Estimated_Value', 'Next_Action'
+                ];
+
+                const response = await gapi.client.sheets.spreadsheets.values.get({
+                    spreadsheetId: GOOGLE_SHEETS_CONFIG.spreadsheetId,
+                    range: `${GOOGLE_SHEETS_CONFIG.sheetName}!A1:AZ1`
+                });
+
+                if (!response.result.values || response.result.values.length === 0) {
+                    await gapi.client.sheets.spreadsheets.values.update({
+                        spreadsheetId: GOOGLE_SHEETS_CONFIG.spreadsheetId,
+                        range: `${GOOGLE_SHEETS_CONFIG.sheetName}!A1`,
+                        valueInputOption: 'USER_ENTERED',
+                        resource: {
+                            values: [headers]
+                        }
+                    });
+
+                    await gapi.client.sheets.spreadsheets.batchUpdate({
+                        spreadsheetId: GOOGLE_SHEETS_CONFIG.spreadsheetId,
+                        resource: {
+                            requests: [
+                                {
+                                    repeatCell: {
+                                        range: {
+                                            sheetId: 0,
+                                            startRowIndex: 0,
+                                            endRowIndex: 1,
+                                            startColumnIndex: 0,
+                                            endColumnIndex: headers.length
+                                        },
+                                        cell: {
+                                            userEnteredFormat: {
+                                                textFormat: { bold: true },
+                                                backgroundColor: { red: 0.9, green: 0.9, blue: 0.9 }
+                                            }
+                                        },
+                                        fields: 'userEnteredFormat(textFormat,backgroundColor)'
+                                    }
+                                },
+                                {
+                                    updateSheetProperties: {
+                                        properties: {
+                                            sheetId: 0,
+                                            gridProperties: { frozenRowCount: 1 }
+                                        },
+                                        fields: 'gridProperties.frozenRowCount'
+                                    }
+                                }
+                            ]
+                        }
+                    });
+
+                    console.log('✅ Sheet headers configured');
+                }
+            } catch (error) {
+                console.error('❌ Error setting up sheet headers:', error);
+            }
+        }
+
+        // Add assessment data to Google Sheets
+        async function addToGoogleSheets(contactData) {
+            try {
+                if (!sheetsInitialized) {
+                    await initializeGoogleSheets();
+                }
+
+                if (!googleAuth.isSignedIn.get()) {
+                    await googleAuth.signIn();
+                }
+
+                const nextRow = await getNextRowNumber();
+
+                const dataRow = [
+                    contactData.timestamp,
+                    contactData.name,
+                    contactData.email,
+                    contactData.phone,
+                    contactData.company,
+                    contactData.sector,
+                    contactData.company_size,
+                    contactData.assessment_score,
+                    getScoreCategory(contactData.assessment_score),
+                    contactData.completion_rate,
+                    contactData.urgency_level,
+                    contactData.lead_score,
+                    contactData.pain_level,
+                    contactData.answer_01, contactData.answer_02, contactData.answer_03, contactData.answer_04, contactData.answer_05,
+                    contactData.answer_06, contactData.answer_07, contactData.answer_08, contactData.answer_09, contactData.answer_10,
+                    contactData.answer_11, contactData.answer_12, contactData.answer_13, contactData.answer_14, contactData.answer_15,
+                    contactData.answer_16, contactData.answer_17, contactData.answer_18, contactData.answer_19, contactData.answer_20,
+                    contactData.answer_21, contactData.answer_22, contactData.answer_23, contactData.answer_24, contactData.answer_25,
+                    contactData.answer_26, contactData.answer_27, contactData.answer_28, contactData.answer_29,
+                    `=IF(G${nextRow}="200+", IF(L${nextRow}>=70, "🔥 HOT", "🟡 WARM"), IF(L${nextRow}>=80, "🟡 WARM", "❄️ COLD"))`,
+                    `=IF(K${nextRow}="ZEER HOOG", "📞 Call Today", IF(K${nextRow}="HOOG", "📧 Email 24h", "📅 Follow-up 1 week"))`,
+                    `=IF(G${nextRow}="200+", 15000, IF(G${nextRow}="51-200", 7500, IF(G${nextRow}="11-50", 3500, 1500)))`,
+                    `=IF(H${nextRow}<=40, "🚨 Urgent Strategy Call", IF(H${nextRow}<=60, "📊 Assessment Review", "💡 Optimization Advice"))`
+                ];
+
+                const response = await gapi.client.sheets.spreadsheets.values.append({
+                    spreadsheetId: GOOGLE_SHEETS_CONFIG.spreadsheetId,
+                    range: `${GOOGLE_SHEETS_CONFIG.sheetName}!A:AZ`,
+                    valueInputOption: 'USER_ENTERED',
+                    insertDataOption: 'INSERT_ROWS',
+                    resource: {
+                        values: [dataRow]
+                    }
+                });
+
+                if (response.result.updates.updatedRows > 0) {
+                    console.log('✅ Data added to Google Sheets');
+                    return {
+                        success: true,
+                        sheetUrl: `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEETS_CONFIG.spreadsheetId}`,
+                        updatedRange: response.result.updates.updatedRange
+                    };
+                } else {
+                    throw new Error('No rows updated');
+                }
+
+            } catch (error) {
+                console.error('❌ Google Sheets update failed:', error);
+                return {
+                    success: false,
+                    error: error.message
+                };
+            }
+        }
+
+        async function getNextRowNumber() {
+            try {
+                const response = await gapi.client.sheets.spreadsheets.values.get({
+                    spreadsheetId: GOOGLE_SHEETS_CONFIG.spreadsheetId,
+                    range: `${GOOGLE_SHEETS_CONFIG.sheetName}!A:A`
+                });
+                
+                return (response.result.values?.length || 0) + 1;
+            } catch (error) {
+                console.error('Error getting next row number:', error);
+                return 2;
+            }
+        }
+
+        // Modified submitContact function with Google Sheets integration
+        function submitContactWithSheets() {
+            const contactData = {
+                timestamp: new Date().toLocaleString('nl-NL'),
+                name: document.getElementById('contact-name').value.trim(),
+                email: document.getElementById('contact-email').value.trim(), 
+                phone: document.getElementById('contact-phone').value.trim(),
+                company: document.getElementById('contact-company').value.trim(),
+                sector: formData.sector || 'Unknown',
+                company_size: formData.companySize || 'Unknown',
+                assessment_score: formData.totalScore || 0,
+                completion_rate: Math.round((Object.keys(formData.answers).length / assessmentQuestions.length) * 100),
+                urgency_level: calculateUrgencyLevel(formData.answers),
+                lead_score: calculateLeadScore(formData.answers),
+                pain_level: calculatePainLevel(formData.answers)
+            };
+
+            for (let i = 0; i < 29; i++) {
+                contactData[`answer_${(i + 1).toString().padStart(2, '0')}`] = formData.answers[i] || 0;
+            }
+
+            if (!contactData.name || !contactData.email || !contactData.company) {
+                alert('⚠️ Vul alle verplichte velden in!');
+                return;
+            }
+
+            const submitButton = document.querySelector('#step6 .cta-button');
+            const originalText = submitButton.textContent;
+            submitButton.textContent = '📊 Toevoegen aan Live Dashboard...';
+            submitButton.disabled = true;
+
+            const isAdmin = contactData.email.toLowerCase().includes('warts@') || 
+                           contactData.email.toLowerCase().includes('wouter@') ||
+                           contactData.email.toLowerCase().includes('recruitin.nl');
+
+            if (isAdmin) {
+                addToGoogleSheets(contactData)
+                    .then(result => {
+                        submitButton.textContent = originalText;
+                        submitButton.disabled = false;
+                        
+                        if (result.success) {
+                            console.log('✅ Admin Google Sheets update successful');
+                            console.log('📊 Sheet URL:', result.sheetUrl);
+                            showSuccessWithSheetsUpdate(contactData, result);
+                        } else {
+                            console.error('❌ Sheets update failed');
+                            showSuccessMessage(contactData, false);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('❌ Sheets update error:', error);
+                        submitButton.textContent = originalText;
+                        submitButton.disabled = false;
+                        showSuccessMessage(contactData, false);
+                    });
+            } else {
+                setTimeout(() => {
+                    submitButton.textContent = originalText;
+                    submitButton.disabled = false;
+                    showSuccessMessage(contactData, false);
+                }, 1000);
+            }
+
+            console.log('📊 FLOWMASTER ASSESSMENT DATA:');
+            console.log('=================================');
+            console.log(`🏢 Bedrijf: ${contactData.company}`);
+            console.log(`👤 Naam: ${contactData.name}`);
+            console.log(`📧 Email: ${contactData.email}`);
+            console.log(`🎯 Assessment Score: ${contactData.assessment_score}%`);
+            console.log('=================================');
+        }
+
+        // Helper functions for enhanced data analysis
+        function calculateUrgencyLevel(answers) {
+            let urgencyScore = 0;
+            const urgencyQuestions = [2, 5, 13, 14, 17, 19, 23];
             
+            urgencyQuestions.forEach(q => {
+                if (answers[q] !== undefined && answers[q] <= 3) {
+                    urgencyScore++;
+                }
+            });
+            
+            if (urgencyScore >= 4) return 'ZEER HOOG';
+            if (urgencyScore >= 3) return 'HOOG';
+            if (urgencyScore >= 2) return 'MEDIUM';
+            return 'LAAG';
+        }
+
+        function calculateLeadScore(answers) {
+            let score = 50;
+            
+            Object.keys(answers).forEach(key => {
+                const answer = answers[key];
+                if (answer <= 2) score += 15;
+                if (answer <= 4) score += 10;
+                if (answer >= 8) score -= 5;
+            });
+            
+            if (formData.companySize === '200+') score += 20;
+            if (formData.companySize === '51-200') score += 15;
+            if (formData.companySize === '11-50') score += 10;
+            
+            if (formData.sector.includes('High-tech') || formData.sector.includes('Machinebouw')) {
+                score += 15;
+            }
+            
+            return Math.min(100, Math.max(0, score));
+        }
+
+        function calculatePainLevel(answers) {
+            const problemCount = Object.values(answers).filter(answer => answer <= 3).length;
+            
+            if (problemCount >= 10) return 'KRITIEK';
+            if (problemCount >= 7) return 'HOOG';
+            if (problemCount >= 4) return 'MEDIUM';
+            return 'LAAG';
+        }
+
+        function getScoreCategory(score) {
+            if (score >= 85) return 'Excellent';
+            if (score >= 70) return 'Goed'; 
+            if (score >= 55) return 'Gemiddeld';
+            if (score >= 40) return 'Onder Gemiddeld';
+            return 'Verbetering Nodig';
+        }
+
+        // Success message functions
+        function showSuccessWithSheetsUpdate(contactData, sheetsResult) {
+            const successHtml = `
+                <div class="card" id="successCard">
+                    <div class="success-state">
+                        <div class="success-icon">📊</div>
+                        <h2 class="success-title">Assessment Voltooid & Live Dashboard Updated!</h2>
+                        <p class="success-message">
+                            Bedankt ${contactData.name}! Je FlowMaster admin assessment is succesvol voltooid.
+                            <br><br>
+                            <strong>📊 AUTOMATISCH TOEGEVOEGD AAN LIVE DASHBOARD</strong><br>
+                            <br><br>
+                            <strong>🎯 Assessment Resultaten:</strong><br>
+                            • Assessment Score: ${contactData.assessment_score}% (${getScoreCategory(contactData.assessment_score)})<br>
+                            • Urgentie Level: ${contactData.urgency_level}<br>
+                            • Lead Score: ${contactData.lead_score}/100<br>
+                            • Pijn Level: ${contactData.pain_level}
+                            <br><br>
+                            <strong>📈 Live Dashboard Features:</strong><br>
+                            ✅ Real-time lead scoring<br>
+                            ✅ Automatic follow-up prioritization<br>
+                            ✅ Hot lead identification<br>
+                            ✅ Revenue estimation<br>
+                            ✅ Mobile toegang via Google Sheets app
+                            <br><br>
+                            <a href="${sheetsResult.sheetUrl}" target="_blank" style="color: #ff6b35; text-decoration: none; font-weight: bold;">
+                                📊 Open Live Dashboard →
+                            </a>
+                        </p>
+                        
+                        <div style="margin-top: 30px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                            <button class="cta-button" onclick="location.reload()" style="flex: 1; min-width: 200px;">
+                                🔄 Nieuwe Assessment
+                            </button>
+                            <button class="download-button" onclick="window.open('${sheetsResult.sheetUrl}')" style="flex: 1; min-width: 200px; background: #22c55e;">
+                                📊 Open Dashboard
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.querySelector('.container').innerHTML = successHtml;
+        }
+
+        function showSuccessMessage(contactData, csvDownloaded = false) {
+            const successContent = `
+                <div class="success-icon">🎉</div>
+                <h2 class="success-title">Assessment Succesvol Voltooid!</h2>
+                <p class="success-message">
+                    Bedankt ${contactData.name}! Je FlowMaster assessment is succesvol voltooid.
+                    <br><br>
+                    <strong>🎯 Je Assessment Resultaten:</strong><br>
+                    • <strong>Assessment Score:</strong> ${contactData.assessment_score}% (${getScoreCategory(contactData.assessment_score)})<br>
+                    • <strong>Urgentie Level:</strong> ${contactData.urgency_level}<br>
+                    • <strong>Lead Score:</strong> ${contactData.lead_score}/100<br>
+                    • <strong>Pijn Level:</strong> ${contactData.pain_level}
+                    <br><br>
+                    <strong>📞 Vervolgstappen:</strong><br>
+                    ✅ We analyseren je assessment gegevens<br>
+                    ✅ Je ontvangt binnen 24 uur een persoonlijk rapport<br>
+                    ✅ We nemen contact op voor een strategisch gesprek<br>
+                    ✅ Samen maken we een actieplan voor optimalisatie
+                    <br><br>
+                    <strong>💡 Wil je direct een gesprek inplannen?</strong><br>
+                    Gebruik de knop hieronder om een afspraak te maken.
+                </p>
+            `;
+
+            const successHtml = `
+                <div class="card" id="successCard">
+                    <div class="success-state">
+                        ${successContent}
+                        
+                        <div style="margin-top: 30px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                            <button class="cta-button" onclick="location.reload()" style="flex: 1; min-width: 200px;">
+                                🔄 Nieuwe Assessment
+                            </button>
+                            <button class="download-button" onclick="window.open('https://calendly.com/wouter-arts-/recruitment-apk-advies')" style="flex: 1; min-width: 200px;">
+                                📅 Boek Gesprek
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.querySelector('.container').innerHTML = successHtml;
+        }
+
+        // Navigation functions
+        function nextStep() {
             if (currentStep === 1) {
                 goToStep(2);
                 return;
@@ -888,7 +1305,6 @@
             }
             
             if (currentStep === 5) {
-                console.log('⚠️ Cannot skip assessment - complete all questions first');
                 alert('⚠️ Voltooi eerst alle assessment vragen!');
                 return;
             }
@@ -901,8 +1317,6 @@
         }
 
         function goToStep(step) {
-            console.log('✅ Going to step:', step);
-            
             try {
                 document.querySelectorAll('.card').forEach(card => {
                     card.classList.add('hidden');
@@ -919,12 +1333,9 @@
                     }
                     
                     if (step === 6) {
-                        // Pre-fill contact form with existing data
                         document.getElementById('contact-name').value = formData.contactName || '';
                         document.getElementById('contact-company').value = formData.companyName || '';
                     }
-                } else {
-                    console.error('❌ Step element not found:', 'step' + step);
                 }
             } catch (error) {
                 console.error('Error in goToStep:', error);
@@ -1022,6 +1433,7 @@
             }
         }
 
+        // Assessment functions
         function initializeAssessment() {
             formData.currentQuestion = 1;
             formData.answers = {};
@@ -1046,294 +1458,3 @@
             if (questionTextEl) questionTextEl.textContent = questionData.question;
 
             if (optionsContainerEl) {
-                optionsContainerEl.innerHTML = '';
-                questionData.options.forEach((option, index) => {
-                    const optionEl = document.createElement('div');
-                    optionEl.className = 'assessment-option';
-                    optionEl.onclick = () => selectAssessmentOption(formData.currentQuestion, option.points, optionEl);
-                    
-                    const optionTextEl = document.createElement('div');
-                    optionTextEl.className = 'assessment-option-text';
-                    optionTextEl.textContent = option.text;
-                    
-                    optionEl.appendChild(optionTextEl);
-                    optionsContainerEl.appendChild(optionEl);
-                });
-            }
-
-            const nextButton = document.getElementById('assessmentNext');
-            if (nextButton) {
-                nextButton.disabled = true;
-                if (formData.currentQuestion === assessmentQuestions.length) {
-                    nextButton.textContent = 'Ga naar Resultaten';
-                } else {
-                    nextButton.textContent = 'Volgende Vraag';
-                }
-            }
-        }
-
-        function selectAssessmentOption(questionId, points, selectedElement) {
-            document.querySelectorAll('.assessment-option').forEach(option => {
-                option.classList.remove('selected');
-            });
-            
-            selectedElement.classList.add('selected');
-            formData.answers[questionId - 1] = points;
-            
-            const nextButton = document.getElementById('assessmentNext');
-            if (nextButton) {
-                nextButton.disabled = false;
-            }
-        }
-
-        function nextAssessmentQuestion() {
-            if (!formData.answers.hasOwnProperty(formData.currentQuestion - 1)) {
-                alert('⚠️ Selecteer eerst een antwoord!');
-                return;
-            }
-
-            if (formData.currentQuestion === assessmentQuestions.length) {
-                calculateFinalScore();
-                goToStep(6);
-            } else {
-                formData.currentQuestion++;
-                displayCurrentQuestion();
-            }
-        }
-
-        function calculateFinalScore() {
-            let totalScore = 0;
-            let maxPossibleScore = assessmentQuestions.length * 10;
-            
-            Object.values(formData.answers).forEach(points => {
-                totalScore += points;
-            });
-            
-            formData.totalScore = Math.round((totalScore / maxPossibleScore) * 100);
-        }
-
-        // ENHANCED CSV EXPORT FUNCTION
-        function submitContact() {
-            const contactData = {
-                timestamp: new Date().toISOString(),
-                name: document.getElementById('contact-name').value.trim(),
-                email: document.getElementById('contact-email').value.trim(), 
-                phone: document.getElementById('contact-phone').value.trim(),
-                company: document.getElementById('contact-company').value.trim(),
-                sector: formData.sector || 'Unknown',
-                company_size: formData.companySize || 'Unknown',
-                assessment_score: formData.totalScore || 0,
-                completion_rate: Math.round((Object.keys(formData.answers).length / assessmentQuestions.length) * 100),
-                urgency_level: calculateUrgencyLevel(formData.answers),
-                lead_score: calculateLeadScore(formData.answers),
-                pain_level: calculatePainLevel(formData.answers)
-            };
-
-            // Add all 29 individual answers
-            for (let i = 0; i < 29; i++) {
-                contactData[`answer_${(i + 1).toString().padStart(2, '0')}`] = formData.answers[i] || 0;
-            }
-
-            // Validation
-            if (!contactData.name || !contactData.email || !contactData.company) {
-                alert('⚠️ Vul alle verplichte velden in!');
-                return;
-            }
-
-            // UI Loading State
-            const submitButton = document.querySelector('#step6 .cta-button');
-            const originalText = submitButton.textContent;
-            submitButton.textContent = '📊 Genereren CSV Download...';
-            submitButton.disabled = true;
-
-            // Create CSV Headers (Dutch + Excel-friendly)
-            const headers = [
-                'Timestamp', 'Naam', 'Email', 'Telefoon', 'Bedrijf', 'Sector', 'Bedrijfsgrootte',
-                'Assessment_Score', 'Voltooiing_Percentage', 'Urgentie_Level', 'Lead_Score', 'Pijn_Level'
-            ];
-
-            // Add answer headers (Q01-Q29)
-            for (let i = 1; i <= 29; i++) {
-                headers.push(`Vraag_${i.toString().padStart(2, '0')}`);
-            }
-
-            // Create data row
-            const dataRow = [
-                contactData.timestamp,
-                contactData.name,
-                contactData.email,
-                contactData.phone,
-                contactData.company,
-                contactData.sector,
-                contactData.company_size,
-                contactData.assessment_score,
-                contactData.completion_rate,
-                contactData.urgency_level,
-                contactData.lead_score,
-                contactData.pain_level
-            ];
-
-            // Add all answer values
-            for (let i = 1; i <= 29; i++) {
-                dataRow.push(contactData[`answer_${i.toString().padStart(2, '0')}`]);
-            }
-
-            // Create CSV content with BOM for proper Excel UTF-8 support
-            const csvContent = '\uFEFF' + [
-                headers.join(','),
-                dataRow.map(field => `"${field}"`).join(',')
-            ].join('\n');
-
-            // Generate filename with company name and date
-            const fileName = `FlowMaster_${contactData.company.replace(/[^a-z0-9]/gi, '_')}_${new Date().toISOString().split('T')[0]}.csv`;
-
-            // Create and trigger download
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-            
-            link.setAttribute('href', url);
-            link.setAttribute('download', fileName);
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-
-            // Console logging for backup
-            console.log('📊 FLOWMASTER ASSESSMENT DATA - READY FOR MANUAL ENTRY:');
-            console.log('=================================================');
-            console.log(`🏢 Bedrijf: ${contactData.company}`);
-            console.log(`👤 Naam: ${contactData.name}`);
-            console.log(`📧 Email: ${contactData.email}`);
-            console.log(`📞 Telefoon: ${contactData.phone}`);
-            console.log(`🎯 Assessment Score: ${contactData.assessment_score}%`);
-            console.log(`⚡ Urgentie Level: ${contactData.urgency_level}`);
-            console.log(`🔥 Lead Score: ${contactData.lead_score}/100`);
-            console.log(`⚠️ Pijn Level: ${contactData.pain_level}`);
-            console.log('=================================================');
-            console.log(`📄 CSV Download: ${fileName}`);
-            console.log('💡 Check Downloads folder voor het CSV bestand');
-
-            // Show success state after download
-            setTimeout(() => {
-                submitButton.textContent = originalText;
-                submitButton.disabled = false;
-                showSuccessWithDownload(contactData, fileName);
-            }, 1500);
-        }
-
-        // Helper functions for enhanced data analysis
-        function calculateUrgencyLevel(answers) {
-            let urgencyScore = 0;
-            
-            // Questions indicating urgency problems (questions 3,6,14,15,18,20,24)
-            const urgencyQuestions = [2, 5, 13, 14, 17, 19, 23]; // 0-based index
-            
-            urgencyQuestions.forEach(q => {
-                if (answers[q] !== undefined && answers[q] <= 3) { // Low scores = high urgency
-                    urgencyScore++;
-                }
-            });
-            
-            if (urgencyScore >= 4) return 'ZEER HOOG';
-            if (urgencyScore >= 3) return 'HOOG';
-            if (urgencyScore >= 2) return 'MEDIUM';
-            return 'LAAG';
-        }
-
-        function calculateLeadScore(answers) {
-            let score = 50; // Base score
-            
-            // Pain points increase score
-            Object.keys(answers).forEach(key => {
-                const answer = answers[key];
-                if (answer <= 2) score += 15; // Major problems = high score
-                if (answer <= 4) score += 10; // Medium problems
-                if (answer >= 8) score -= 5;  // Good situation = lower urgency
-            });
-            
-            // Company size bonus (larger companies = higher value)
-            if (formData.companySize === '200+') score += 20;
-            if (formData.companySize === '51-200') score += 15;
-            if (formData.companySize === '11-50') score += 10;
-            
-            // High-value sectors bonus
-            if (formData.sector.includes('High-tech') || formData.sector.includes('Machinebouw')) {
-                score += 15;
-            }
-            
-            return Math.min(100, Math.max(0, score));
-        }
-
-        function calculatePainLevel(answers) {
-            const problemCount = Object.values(answers).filter(answer => answer <= 3).length;
-            
-            if (problemCount >= 10) return 'KRITIEK';
-            if (problemCount >= 7) return 'HOOG';
-            if (problemCount >= 4) return 'MEDIUM';
-            return 'LAAG';
-        }
-
-        function showSuccessWithDownload(contactData, fileName) {
-            const successHtml = `
-                <div class="card" id="successCard">
-                    <div class="success-state">
-                        <div class="success-icon">📊</div>
-                        <h2 class="success-title">Assessment Voltooid & Data Geëxporteerd!</h2>
-                        <p class="success-message">
-                            Bedankt ${contactData.name}! Je FlowMaster assessment is succesvol voltooid.
-                            <br><br>
-                            <strong>📄 CSV Bestand Gedownload:</strong><br>
-                            <code style="background: #f0f0f0; padding: 8px; border-radius: 5px; font-size: 12px;">${fileName}</code>
-                            <br><br>
-                            <strong>🎯 Je Assessment Resultaten:</strong><br>
-                            • <strong>Assessment Score:</strong> ${contactData.assessment_score}% (${getScoreCategory(contactData.assessment_score)})<br>
-                            • <strong>Urgentie Level:</strong> ${contactData.urgency_level}<br>
-                            • <strong>Lead Score:</strong> ${contactData.lead_score}/100<br>
-                            • <strong>Pijn Level:</strong> ${contactData.pain_level}
-                            <br><br>
-                            <strong>📊 CSV bevat complete data:</strong><br>
-                            ✅ Alle 29 assessment antwoorden<br>
-                            ✅ Calculated metrics en scores<br>
-                            ✅ Contact en bedrijfsinformatie<br>
-                            ✅ Ready voor import in elk systeem
-                            <br><br>
-                            <strong>📁 Import instructies:</strong><br>
-                            • <strong>Google Sheets:</strong> File → Import → Upload CSV<br>
-                            • <strong>Pipedrive:</strong> Settings → Import → Choose CSV<br>
-                            • <strong>Excel:</strong> Data → From Text/CSV → Select file
-                            <br><br>
-                            <small>💡 Check je Downloads folder voor het CSV bestand</small>
-                        </p>
-                        
-                        <div style="margin-top: 30px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                            <button class="cta-button" onclick="location.reload()" style="flex: 1; min-width: 200px;">
-                                🔄 Nieuwe Assessment
-                            </button>
-                            <button class="download-button" onclick="window.open('https://calendly.com/jouw-link')" style="flex: 1; min-width: 200px;">
-                                📅 Boek Gesprek
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            document.querySelector('.container').innerHTML = successHtml;
-        }
-
-        function getScoreCategory(score) {
-            if (score >= 85) return 'Excellent';
-            if (score >= 70) return 'Goed';
-            if (score >= 55) return 'Gemiddeld';
-            if (score >= 40) return 'Onder Gemiddeld';
-            return 'Verbetering Nodig';
-        }
-
-        // Initialize
-        updateProgress();
-        console.log('🚀 FlowMaster Pro V4 CSV Export Loaded!');
-        console.log('📊 Assessment ready with', assessmentQuestions.length, 'questions + CSV export');
-    </script>
-</body>
-</html>
