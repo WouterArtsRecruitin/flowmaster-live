@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
@@ -11,274 +12,192 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
-        }
+```
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: #333;
+    }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+    }
 
-        .header-card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            margin: 20px 0;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            text-align: center;
-        }
+    .header-card {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        margin: 20px 0;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        text-align: center;
+    }
 
+    .main-title {
+        font-size: 42px;
+        font-weight: 800;
+        color: #1a1a1a;
+        margin-bottom: 15px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .subtitle {
+        font-size: 20px;
+        color: #666;
+        margin-bottom: 30px;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 20px;
+        margin: 40px 0;
+    }
+
+    .stat-item {
+        text-align: center;
+        padding: 25px;
+        background: #f8fafc;
+        border-radius: 16px;
+        border: 2px solid #e2e8f0;
+        transition: all 0.3s ease;
+    }
+
+    .stat-item:hover {
+        border-color: #667eea;
+        transform: translateY(-2px);
+    }
+
+    .stat-number {
+        display: block;
+        font-size: 28px;
+        font-weight: 800;
+        color: #667eea;
+        margin-bottom: 8px;
+    }
+
+    .stat-label {
+        font-size: 14px;
+        color: #666;
+        font-weight: 500;
+    }
+
+    .benefits-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+        margin: 40px 0;
+    }
+
+    .benefit-item {
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+
+    .benefit-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+
+    .benefit-icon {
+        font-size: 36px;
+        margin-bottom: 15px;
+    }
+
+    .benefit-title {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: #1a1a1a;
+    }
+
+    .benefit-description {
+        font-size: 14px;
+        color: #666;
+        line-height: 1.6;
+    }
+
+    .cta-section {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        margin: 30px 0;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+
+    .cta-button {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        padding: 18px 40px;
+        border-radius: 16px;
+        font-size: 20px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        margin: 10px;
+    }
+
+    .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+    }
+
+    .typeform-container {
+        background: white;
+        border-radius: 20px;
+        padding: 20px;
+        margin: 30px 0;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        min-height: 600px;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .typeform-iframe {
+        width: 100%;
+        height: 600px;
+        border: none;
+        border-radius: 10px;
+    }
+
+    @media (max-width: 768px) {
         .main-title {
-            font-size: 42px;
-            font-weight: 800;
-            color: #1a1a1a;
-            margin-bottom: 15px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .subtitle {
-            font-size: 20px;
-            color: #666;
-            margin-bottom: 30px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            margin: 40px 0;
-        }
-
-        .stat-item {
-            text-align: center;
-            padding: 25px;
-            background: #f8fafc;
-            border-radius: 16px;
-            border: 2px solid #e2e8f0;
-            transition: all 0.3s ease;
-        }
-
-        .stat-item:hover {
-            border-color: #667eea;
-            transform: translateY(-2px);
-        }
-
-        .stat-number {
-            display: block;
-            font-size: 28px;
-            font-weight: 800;
-            color: #667eea;
-            margin-bottom: 8px;
-        }
-
-        .stat-label {
-            font-size: 14px;
-            color: #666;
-            font-weight: 500;
-        }
-
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            margin: 40px 0;
-        }
-
-        .benefit-item {
-            background: white;
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-
-        .benefit-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-        }
-
-        .benefit-icon {
-            font-size: 36px;
-            margin-bottom: 15px;
-        }
-
-        .benefit-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: #1a1a1a;
-        }
-
-        .benefit-description {
-            font-size: 14px;
-            color: #666;
-            line-height: 1.6;
-        }
-
-        .cta-section {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            margin: 30px 0;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
-        .cta-button {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 18px 40px;
-            border-radius: 16px;
-            font-size: 20px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            margin: 10px;
-        }
-
-        .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
-        }
-
-        .typeform-container {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            margin: 30px 0;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            min-height: 600px;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .loading-state {
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .success-card {
-            background: white;
-            border-radius: 20px;
-            padding: 50px 40px;
-            margin: 30px 0;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
-        .success-icon {
-            font-size: 80px;
-            margin-bottom: 30px;
-            animation: bounce 0.6s ease-in-out;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-20px); }
-            60% { transform: translateY(-10px); }
-        }
-
-        .success-title {
             font-size: 32px;
-            font-weight: 800;
-            color: #22c55e;
-            margin-bottom: 20px;
         }
-
-        .success-message {
+        
+        .subtitle {
             font-size: 18px;
-            color: #666;
-            margin-bottom: 40px;
-            line-height: 1.6;
+        }
+        
+        .container {
+            padding: 15px;
+        }
+        
+        .header-card, .cta-section {
+            padding: 30px 20px;
         }
 
-        .calendly-button {
-            background: #22c55e;
-            color: white;
-            border: none;
-            padding: 18px 40px;
-            border-radius: 16px;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            margin: 10px;
+        .typeform-iframe {
+            height: 500px;
         }
+    }
+</style>
+```
 
-        .calendly-button:hover {
-            background: #16a34a;
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(34, 197, 94, 0.3);
-        }
-
-        .restart-button {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            margin: 10px;
-        }
-
-        .restart-button:hover {
-            background: #5a6fd8;
-            transform: translateY(-2px);
-        }
-
-        @media (max-width: 768px) {
-            .main-title {
-                font-size: 32px;
-            }
-            
-            .subtitle {
-                font-size: 18px;
-            }
-            
-            .container {
-                padding: 15px;
-            }
-            
-            .header-card, .cta-section {
-                padding: 30px 20px;
-            }
-        }
-    </style>
 </head>
 <body>
     <div class="container">
@@ -286,288 +205,83 @@
         <div class="header-card" id="headerSection">
             <h1 class="main-title">FlowMaster Pro</h1>
             <p class="subtitle">Advanced Recruitment Intelligence Platform</p>
-            
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <span class="stat-number">29</span>
-                    <span class="stat-label">Expert Vragen</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">5K+</span>
-                    <span class="stat-label">Bedrijven Getest</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">8min</span>
-                    <span class="stat-label">Complete Analyse</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">95%</span>
-                    <span class="stat-label">Accuracy Rate</span>
-                </div>
-            </div>
-        </div>
 
-        <!-- Benefits Section -->
-        <div class="benefits-grid">
-            <div class="benefit-item">
-                <div class="benefit-icon">🎯</div>
-                <div class="benefit-title">Sector-Specifieke Analyse</div>
-                <div class="benefit-description">Benchmarking tegen 5000+ tech/industrie bedrijven in Nederland</div>
+```
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-number">29</span>
+                <span class="stat-label">Expert Vragen</span>
             </div>
-            <div class="benefit-item">
-                <div class="benefit-icon">📊</div>
-                <div class="benefit-title">Real-Time Insights</div>
-                <div class="benefit-description">Direct inzicht in recruitment maturity en concrete verbeterpunten</div>
+            <div class="stat-item">
+                <span class="stat-number">5K+</span>
+                <span class="stat-label">Bedrijven Getest</span>
             </div>
-            <div class="benefit-item">
-                <div class="benefit-icon">⚡</div>
-                <div class="benefit-title">Instant Actionable Results</div>
-                <div class="benefit-description">Concrete aanbevelingen met prioriteit, budget en timeline</div>
+            <div class="stat-item">
+                <span class="stat-number">8min</span>
+                <span class="stat-label">Complete Analyse</span>
             </div>
-        </div>
-
-        <!-- CTA Section -->
-        <div class="cta-section" id="ctaSection">
-            <h2 style="font-size: 28px; margin-bottom: 20px; color: #1a1a1a;">Start Je Complete Assessment</h2>
-            <p style="font-size: 16px; color: #666; margin-bottom: 30px;">
-                Ontdek binnen 8 minuten waar jouw recruitment proces staat en krijg een persoonlijk adviesgesprek.
-            </p>
-            <button class="cta-button" onclick="startAssessment()">
-                🚀 Start FlowMaster Assessment Nu
-            </button>
-        </div>
-
-        <!-- Typeform Container -->
-        <div class="typeform-container hidden" id="typeformContainer">
-            <div class="loading-state" id="loadingState">
-                <div class="spinner"></div>
-                <h3>FlowMaster Assessment wordt geladen...</h3>
-                <p>Bereid je voor op 29 strategische vragen over recruitment excellence</p>
+            <div class="stat-item">
+                <span class="stat-number">95%</span>
+                <span class="stat-label">Accuracy Rate</span>
             </div>
-            
-            <!-- Typeform Embed will be inserted here -->
-            <div id="typeformEmbed"></div>
-        </div>
-
-        <!-- Success Screen -->
-        <div class="success-card hidden" id="successScreen">
-            <div class="success-icon">🎉</div>
-            <h2 class="success-title">Assessment Voltooid!</h2>
-            <div class="success-message">
-                <strong>Bedankt voor het voltooien van de FlowMaster Assessment!</strong>
-                <br><br>
-                Je assessment wordt nu verwerkt door ons AI-systeem. Binnen 24 uur ontvang je:
-                <br><br>
-                ✅ <strong>Persoonlijk Assessment Rapport</strong> met sector benchmarking<br>
-                ✅ <strong>Concrete Verbeterplan</strong> met prioriteiten en budget<br>
-                ✅ <strong>Implementation Roadmap</strong> voor de komende 90 dagen<br>
-                <br>
-                <strong>🎯 Wil je direct je resultaten bespreken?</strong>
-            </div>
-            
-            <a href="https://calendly.com/wouter-arts-/recruitment-apk-advies" 
-               class="calendly-button" 
-               target="_blank">
-                📅 Boek Direct Adviesgesprek (30min)
-            </a>
-            
-            <br>
-            
-            <button class="restart-button" onclick="restartAssessment()">
-                🔄 Nieuwe Assessment Starten
-            </button>
         </div>
     </div>
 
-    <script>
-        // WOUTER'S ACTUAL CONFIGURATION
-        const TYPEFORM_ID = '01K1JZVJTG0RPMBGQR0J9DXSC1'; // Wouter's FlowMaster Typeform
-        const ZAPIER_WEBHOOK = null; // Not needed - using Typeform trigger in Zapier!
+    <!-- Benefits Section -->
+    <div class="benefits-grid">
+        <div class="benefit-item">
+            <div class="benefit-icon">🎯</div>
+            <div class="benefit-title">Sector-Specifieke Analyse</div>
+            <div class="benefit-description">Benchmarking tegen 5000+ tech/industrie bedrijven in Nederland</div>
+        </div>
+        <div class="benefit-item">
+            <div class="benefit-icon">📊</div>
+            <div class="benefit-title">Real-Time Insights</div>
+            <div class="benefit-description">Direct inzicht in recruitment maturity en concrete verbeterpunten</div>
+        </div>
+        <div class="benefit-item">
+            <div class="benefit-icon">⚡</div>
+            <div class="benefit-title">Instant Actionable Results</div>
+            <div class="benefit-description">Concrete aanbevelingen met prioriteit, budget en timeline</div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="cta-section" id="ctaSection">
+        <h2 style="font-size: 28px; margin-bottom: 20px; color: #1a1a1a;">Start Je Complete Assessment</h2>
+        <p style="font-size: 16px; color: #666; margin-bottom: 30px;">
+            Ontdek binnen 8 minuten waar jouw recruitment proces staat en krijg een persoonlijk adviesgesprek.
+        </p>
+        <button class="cta-button" onclick="showAssessment()">
+            🚀 Start FlowMaster Assessment Nu
+        </button>
+    </div>
+
+    <!-- Typeform Container -->
+    <div class="typeform-container hidden" id="typeformContainer">
+        <iframe 
+            id="typeformIframe"
+            class="typeform-iframe"
+            src="https://form.typeform.com/to/01K1JZVJTG0RPMBGQR0J9DXSC1?typeform-embed=embed-widget&typeform-source=recruitmentapk.nl"
+            allow="camera; microphone; autoplay; encrypted-media;">
+        </iframe>
+    </div>
+</div>
+
+<script>
+    function showAssessment() {
+        // Hide header and CTA
+        document.getElementById('headerSection').style.display = 'none';
+        document.getElementById('ctaSection').style.display = 'none';
         
-        let assessmentStarted = false;
+        // Show typeform
+        document.getElementById('typeformContainer').style.display = 'block';
+        
+        // Scroll to typeform
+        document.getElementById('typeformContainer').scrollIntoView();
+    }
+</script>
+```
 
-        function startAssessment() {
-            console.log('🚀 Starting FlowMaster Assessment');
-            
-            // Hide header and CTA
-            document.getElementById('headerSection').classList.add('hidden');
-            document.getElementById('ctaSection').classList.add('hidden');
-            
-            // Show typeform container
-            document.getElementById('typeformContainer').classList.remove('hidden');
-            
-            // Load Typeform
-            loadTypeform();
-            
-            // Track start event
-            trackEvent('assessment_started', {
-                timestamp: new Date().toISOString(),
-                user_agent: navigator.userAgent
-            });
-        }
-
-        function loadTypeform() {
-            console.log('📝 Loading Typeform with ID:', TYPEFORM_ID);
-            
-            // Show loading state
-            document.getElementById('loadingState').style.display = 'block';
-            
-            // Create Typeform embed
-            const embedContainer = document.getElementById('typeformEmbed');
-            
-            // Method 1: Using Typeform Embed SDK (Recommended)
-            if (window.tf) {
-                setTimeout(() => {
-                    window.tf.createWidget(TYPEFORM_ID, {
-                        container: embedContainer,
-                        width: '100%',
-                        height: '600px',
-                        onSubmit: function() {
-                            console.log('✅ Typeform submitted successfully');
-                            handleAssessmentComplete();
-                        },
-                        onReady: function() {
-                            console.log('📋 Typeform loaded and ready');
-                            document.getElementById('loadingState').style.display = 'none';
-                        },
-                        hidden: {
-                            source: 'flowmaster_website',
-                            timestamp: new Date().toISOString()
-                        }
-                    });
-                }, 1000);
-            } else {
-                // Method 2: Fallback iframe embed
-                setTimeout(() => {
-                    embedContainer.innerHTML = `
-                        <iframe 
-                            src="https://form.typeform.com/to/${TYPEFORM_ID}?typeform-embed=embed-widget"
-                            width="100%" 
-                            height="600px" 
-                            frameborder="0"
-                            onload="document.getElementById('loadingState').style.display = 'none'">
-                        </iframe>
-                    `;
-                }, 1000);
-                
-                // Simulate completion after 5 minutes (fallback)
-                setTimeout(() => {
-                    if (!assessmentCompleted) {
-                        console.log('⏰ Simulating assessment completion (fallback)');
-                        handleAssessmentComplete();
-                    }
-                }, 300000); // 5 minutes
-            }
-        }
-
-        let assessmentCompleted = false;
-
-        function handleAssessmentComplete() {
-            if (assessmentCompleted) return;
-            assessmentCompleted = true;
-            
-            console.log('🎯 Assessment completed, showing success screen');
-            
-            // Hide typeform
-            document.getElementById('typeformContainer').classList.add('hidden');
-            
-            // Show success screen
-            document.getElementById('successScreen').classList.remove('hidden');
-            
-            // Track completion
-            trackEvent('assessment_completed', {
-                timestamp: new Date().toISOString(),
-                completion_time: Date.now()
-            });
-            
-            // Optional: Send to Zapier webhook for additional processing
-            if (ZAPIER_WEBHOOK && ZAPIER_WEBHOOK !== 'https://hooks.zapier.com/hooks/catch/YOUR_WEBHOOK_ID/') {
-                sendToZapier({
-                    event: 'flowmaster_assessment_completed',
-                    timestamp: new Date().toISOString(),
-                    source: 'flowmaster_website'
-                });
-            }
-        }
-
-        function restartAssessment() {
-            console.log('🔄 Restarting assessment');
-            
-            // Reset state
-            assessmentCompleted = false;
-            assessmentStarted = false;
-            
-            // Show header and CTA
-            document.getElementById('headerSection').classList.remove('hidden');
-            document.getElementById('ctaSection').classList.remove('hidden');
-            
-            // Hide other sections
-            document.getElementById('typeformContainer').classList.add('hidden');
-            document.getElementById('successScreen').classList.add('hidden');
-            
-            // Clear typeform
-            document.getElementById('typeformEmbed').innerHTML = '';
-            
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function trackEvent(eventName, data) {
-            console.log(`📊 Tracking event: ${eventName}`, data);
-            
-            // Google Analytics (if available)
-            if (typeof gtag !== 'undefined') {
-                gtag('event', eventName, {
-                    custom_parameter_1: data.timestamp,
-                    event_category: 'FlowMaster Assessment'
-                });
-            }
-            
-            // Console log for debugging
-            console.log('Event tracked:', eventName, data);
-        }
-
-        function sendToZapier(data) {
-            if (!ZAPIER_WEBHOOK || ZAPIER_WEBHOOK === 'https://hooks.zapier.com/hooks/catch/YOUR_WEBHOOK_ID/') {
-                console.log('⚠️ Zapier webhook not configured');
-                return;
-            }
-            
-            fetch(ZAPIER_WEBHOOK, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => {
-                console.log('✅ Data sent to Zapier successfully');
-            })
-            .catch(error => {
-                console.error('❌ Error sending to Zapier:', error);
-            });
-        }
-
-        // Load Typeform SDK
-        (function() {
-            var qs, js, q, s, d = document, gi = d.getElementById, ce = d.createElement, gt = d.getElementsByTagName, id = "typef_orm_share", b = "https://embed.typeform.com/";
-            if (!gi.call(d, id)) {
-                js = ce.call(d, "script");
-                js.id = id;
-                js.src = b + "embed.js";
-                q = gt.call(d, "script")[0];
-                q.parentNode.insertBefore(js, q);
-            }
-        })();
-
-        // Initialize Google Analytics (optional)
-        // window.dataLayer = window.dataLayer || [];
-        // function gtag(){dataLayer.push(arguments);}
-        // gtag('js', new Date());
-        // gtag('config', 'GA_MEASUREMENT_ID');
-
-        console.log('🚀 FlowMaster Pro loaded successfully!');
-        console.log('📋 Ready to start assessment with Typeform ID:', TYPEFORM_ID);
-    </script>
 </body>
 </html>
