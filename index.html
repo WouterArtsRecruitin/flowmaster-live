@@ -145,6 +145,61 @@
             color: #F57F17;
         }
 
+        /* FULL SCREEN TYPEFORM STYLING */
+        .fullscreen-typeform {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: white;
+            z-index: 9999;
+            display: none;
+        }
+
+        .fullscreen-header {
+            background: var(--primary-blue);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .fullscreen-header h3 {
+            margin: 0;
+            font-size: 1.3rem;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+
+        .close-button:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .typeform-content {
+            height: calc(100vh - 60px);
+            width: 100%;
+            overflow: hidden;
+        }
+
+        /* TypeForm Container Styling for Full Screen */
+        .fullscreen-typeform [data-tf-live] {
+            height: 100%;
+            width: 100%;
+            border: none;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .header h1 {
@@ -157,6 +212,14 @@
             
             .container {
                 padding: 0 15px;
+            }
+            
+            .fullscreen-header {
+                padding: 10px 15px;
+            }
+            
+            .fullscreen-header h3 {
+                font-size: 1.1rem;
             }
         }
     </style>
@@ -195,26 +258,53 @@
                 <li>🔒 Veilig & vertrouwelijk</li>
             </ul>
 
-            <a href="#start-assessment" class="cta-button">Start Assessment Nu</a>
+            <!-- Full Screen Assessment Button -->
+            <a href="#" class="cta-button" onclick="openFullScreenAssessment()">🖥️ Start Assessment (Groot Scherm)</a>
 
             <div class="warning-box">
-                ⚠️ <strong>Assessment niet zichtbaar?</strong><br>
-                Probeer je adblocker uit te schakelen of gebruik Incognito mode.
+                ✨ <strong>Full Screen Assessment Experience</strong><br>
+                Klik op de button voor een professionele groot-scherm assessment ervaring.
             </div>
         </div>
     </div>
 
+    <!-- Full Screen TypeForm Modal -->
+    <div id="fullscreen-assessment" class="fullscreen-typeform">
+        <div class="fullscreen-header">
+            <h3>🎯 Recruitment APK Assessment</h3>
+            <button class="close-button" onclick="closeFullScreenAssessment()">&times;</button>
+        </div>
+        <div class="typeform-content">
+            <div data-tf-live="01K1T6PZQ032KFF5194CA0NJDA"></div>
+            <script src="//embed.typeform.com/next/embed.js"></script>
+        </div>
+    </div>
+
     <script>
-        // Recruitment APK Assessment Logic
+        // Recruitment APK - Full Screen TypeForm
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Recruitment APK Assessment geladen');
-            
-            // Add your assessment functionality here
-            document.querySelector('.cta-button').addEventListener('click', function(e) {
-                e.preventDefault();
-                // Start assessment process
-                alert('Assessment wordt gestart...');
-            });
+            console.log('Recruitment APK Full Screen versie geladen');
+        });
+
+        // Open Full Screen Assessment
+        function openFullScreenAssessment() {
+            document.getElementById('fullscreen-assessment').style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            console.log('Full Screen TypeForm geopend');
+        }
+
+        // Close Full Screen Assessment
+        function closeFullScreenAssessment() {
+            document.getElementById('fullscreen-assessment').style.display = 'none';
+            document.body.style.overflow = 'auto'; // Restore scrolling
+            console.log('Full Screen TypeForm gesloten');
+        }
+
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeFullScreenAssessment();
+            }
         });
     </script>
 </body>
