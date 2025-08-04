@@ -93,25 +93,51 @@
             top: 0;
         }
 
-        /* CTA Button */
+        /* CTA Button - SUPER PROMINENT */
         .cta-button {
             background: linear-gradient(135deg, var(--accent-orange) 0%, #E67E22 100%);
             color: white;
-            padding: 15px 30px;
+            padding: 20px 40px;
             border: none;
-            border-radius: 8px;
-            font-size: 1.2rem;
-            font-weight: 600;
+            border-radius: 12px;
+            font-size: 1.4rem;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
-            margin: 20px 0;
+            margin: 40px 0;
+            box-shadow: 0 8px 25px rgba(244, 124, 60, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
         }
 
         .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(244, 124, 60, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(244, 124, 60, 0.5);
+            background: linear-gradient(135deg, #E67E22 0%, var(--accent-orange) 100%);
+        }
+
+        .cta-button:active {
+            transform: translateY(-1px);
+        }
+
+        /* CTA Button Pulse Animation */
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.8s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
         }
 
         /* Feature Highlights */
@@ -258,12 +284,22 @@
                 <li>🔒 Veilig & vertrouwelijk</li>
             </ul>
 
-            <!-- Full Screen Assessment Button -->
-            <a href="#" class="cta-button" onclick="openFullScreenAssessment()">🖥️ Start Assessment (Groot Scherm)</a>
+            <!-- SUPER PROMINENT Full Screen Assessment Button -->
+            <div style="text-align: center; margin: 50px 0; padding: 30px; background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%); border-radius: 15px; border: 2px solid var(--accent-orange);">
+                <h3 style="color: var(--primary-blue); margin-bottom: 20px; font-size: 1.3rem;">
+                    🚀 Klaar om te starten?
+                </h3>
+                <a href="#" class="cta-button" onclick="openFullScreenAssessment()">
+                    🖥️ Start Assessment Nu
+                </a>
+                <p style="color: var(--text-color); margin-top: 15px; font-size: 0.9rem; opacity: 0.8;">
+                    Groot scherm experience • 7 minuten • Professioneel
+                </p>
+            </div>
 
             <div class="warning-box">
-                ✨ <strong>Full Screen Assessment Experience</strong><br>
-                Klik op de button voor een professionele groot-scherm assessment ervaring.
+                ✨ <strong>Premium Assessment Experience</strong><br>
+                De button hierboven opent een professionele groot-scherm assessment ervaring.
             </div>
         </div>
     </div>
